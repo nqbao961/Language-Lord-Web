@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import './assets/styles/colors';
+
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0 auto;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--charcoal);
+  max-width: 1440px;
+
+  .simplebar-track.simplebar-vertical {
+    width: 8px;
+  }
+  .simplebar-scrollbar:before {
+    left: 0px;
+    right: 4px;
+    background: var(--light-grey);
+  }
+}
+
+input,
+button,
+textarea {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+}
