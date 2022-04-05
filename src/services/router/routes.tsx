@@ -11,13 +11,34 @@ import Users from '../../pages/users';
 
 interface RouteWithTitleObject extends RouteObject {
   title?: string;
+  faIcon?: string;
   children?: RouteWithTitleObject[];
 }
 export const adminRoutes: RouteWithTitleObject[] = [
-  { path: 'dashboard', element: <Dashboard />, title: 'Dashboard' },
-  { path: 'quizzes', element: <Quizzes />, title: 'Quizzes' },
-  { path: 'levels', element: <Levels />, title: 'Levels' },
-  { path: 'users', element: <Users />, title: 'Users' },
+  {
+    path: 'dashboard',
+    element: <Dashboard />,
+    title: 'Dashboard',
+    faIcon: 'fa-chart-tree-map',
+  },
+  {
+    path: 'quizzes',
+    element: <Quizzes />,
+    title: 'Quizzes',
+    faIcon: 'fa-puzzle',
+  },
+  {
+    path: 'levels',
+    element: <Levels />,
+    title: 'Levels',
+    faIcon: 'fa-arrow-up-big-small',
+  },
+  {
+    path: 'users',
+    element: <Users />,
+    title: 'Users',
+    faIcon: 'fa-user-astronaut',
+  },
 ];
 
 export const routes: RouteWithTitleObject[] = [

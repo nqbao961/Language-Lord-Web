@@ -1,0 +1,160 @@
+.container {
+  width: 100%;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tabList {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: $sidebar-mobile-height;
+  margin: 0;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 0;
+  list-style-type: none;
+  background-color: var(--primary);
+  color: var(--on-primary);
+  border-radius: 16px 16px 0 0;
+  transition: background-color 0.2s, color 0.2s;
+
+  .tabLink {
+    width: 80px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    color: var(--on-primary);
+    text-decoration: none;
+    color: var(--primary-container);
+    height: 100%;
+
+    &.active {
+      color: var(--on-primary);
+    }
+  }
+
+  i {
+    position: absolute;
+    top: 10px;
+    font-size: 20px;
+    --fa-animation-iteration-count: 1;
+    --fa-beat-fade-scale: 0.8;
+    --fa-animation-duration: 0.5s;
+  }
+
+  span {
+    position: absolute;
+    top: 36px;
+  }
+}
+
+.actionBar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: $header-mobile-height;
+  padding: 0 8px;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--primary);
+  color: var(--on-primary);
+  border-radius: 0 0 16px 16px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.actionContainer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.language {
+  display: flex;
+  gap: 8px;
+  img {
+    width: 28px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.2s ease-in;
+
+    &.active {
+      opacity: 1;
+    }
+  }
+}
+
+.theme {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--primary-container);
+  color: var(--on-primary-container);
+  font-size: 18px;
+  border-radius: 6px;
+  padding: 3px;
+  height: 28px;
+  position: relative;
+  cursor: pointer;
+
+  &::before {
+    content: '';
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    background-color: var(--primary);
+    position: absolute;
+    z-index: 1;
+    left: 3px;
+    transition: all 0.3s;
+  }
+
+  .themeIcon {
+    z-index: 2;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  i {
+    &.active {
+      color: var(--on-primary);
+    }
+  }
+}
+
+:global {
+  .dark {
+    :local {
+      .theme {
+        &::before {
+          left: 31px;
+        }
+      }
+    }
+  }
+}
+
+.logout {
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.desktopIcon {
+  display: none;
+
+  @include desktop {
+    display: block;
+  }
+}
+
+.mobileIcon {
+  @include desktop {
+    display: none;
+  }
+}

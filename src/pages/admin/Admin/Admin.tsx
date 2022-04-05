@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { Sidebar } from '../../../components';
+import styles from './Admin.module.scss';
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -10,10 +11,11 @@ export default function Admin() {
   }, []);
 
   return (
-    <div>
+    <>
       <Sidebar />
-      Admin
-      <Outlet />
-    </div>
+      <div className={styles.mainContent}>
+        <Outlet />
+      </div>
+    </>
   );
 }

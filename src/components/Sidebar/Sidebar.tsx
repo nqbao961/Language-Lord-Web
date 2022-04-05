@@ -1,14 +1,124 @@
-import { Link } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { adminRoutes } from '../../services/router/routes';
+import styles from './Sidebar.module.scss';
+import vietnamFlag from '../../assets/images/vietnam.png';
+import usFlag from '../../assets/images/united-states.png';
+import { useEffect, useState } from 'react';
+import { User } from '../../services/models';
 
 export function Sidebar() {
+  const [lang, setLang] = useState<User['preferedLang']>(
+    (localStorage.getItem('preferedLang') as User['preferedLang']) || 'vi'
+  );
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || '');
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  }, [theme]);
+
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    navigate('/login', { replace: true });
+  };
+
+  const handleMouseDown = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
+    const icon = (e.currentTarget as HTMLAnchorElement).querySelector(
+      '.fa-solid'
+    );
+    icon!.classList.add('fa-beat-fade');
+    setTimeout(() => {
+      icon!.classList.remove('fa-beat-fade');
+    }, 500);
+  };
+
+  const changeLang = (lang: User['preferedLang']) => {
+    localStorage.setItem('preferedLang', lang);
+    setLang(lang);
+  };
+
+  const changeTheme = (theme: string) => {
+    localStorage.setItem('theme', theme);
+    setTheme(theme);
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  };
+
   return (
-    <ul className="App-nav-list">
-      {adminRoutes.map((route, i) => (
-        <li key={i} className="App-nav-item">
-          <Link to={route.path!}>{route.title}</Link>
-        </li>
-      ))}
-    </ul>
+    <div className={styles.container}>
+      <div className={styles.desktopIcon}>icon</div>
+      <ul className={styles.tabList}>
+        {adminRoutes.map((route, i) => (
+          <li key={i} className={styles.tabItem}>
+            <NavLink
+              to={route.path!}
+              className={({ isActive }) =>
+                `${styles.tabLink} ${isActive ? styles.active : ''}`
+              }
+              onMouseDown={e => handleMouseDown(e)}
+            >
+              <i className={`fa-solid ${route.faIcon}`}></i>
+              <span>{route.title}</span>
+            </NavLink>
+          </li>
+        ))}
+      </ul>
+
+      <div className={styles.actionBar}>
+        <div className={styles.mobileIcon}>icon</div>
+        <div className={styles.actionContainer}>
+          <div className={styles.language}>
+            <img
+              className={lang === 'vi' ? styles.active : ''}
+              src={vietnamFlag}
+              alt="vietnam-flag"
+              onClick={() => changeLang('vi')}
+            />
+            <img
+              className={lang === 'en' ? styles.active : ''}
+              src={usFlag}
+              alt="us-flag"
+              onClick={() => changeLang('en')}
+            />
+          </div>
+          <div
+            className={styles.theme}
+            onClick={() => changeTheme(theme === 'dark' ? '' : 'dark')}
+          >
+            <div className={styles.themeIcon}>
+              <i
+                className={`fa-solid ${
+                  theme === 'dark'
+                    ? 'fa-brightness-low'
+                    : styles.active + ' fa-brightness'
+                }`}
+              ></i>
+            </div>
+            <div className={styles.themeIcon}>
+              <i
+                className={`fa-solid ${
+                  theme === 'dark'
+                    ? styles.active + ' fa-moon-stars'
+                    : 'fa-moon'
+                }`}
+              ></i>
+            </div>
+          </div>
+          <div className={styles.logout} onClick={logout}>
+            <i className="fa-solid fa-right-from-bracket"></i>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
