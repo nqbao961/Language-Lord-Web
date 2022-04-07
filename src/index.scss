@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
 @import './assets/styles/colors';
 @import './assets/fontawesome/css/all.min.css';
 
@@ -10,11 +10,11 @@
 
 body {
   margin: 0 auto;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-size: 14px;
   line-height: 20px;
   color: var(--on-background);
-  background-color: var(--background);
+  background-color: var(--secondary-container);
   max-width: 1440px;
   transition: background-color 0.2s, color 0.2s;
 
@@ -31,7 +31,7 @@ body {
 input,
 button,
 textarea {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-size: 14px;
   line-height: 20px;
 }

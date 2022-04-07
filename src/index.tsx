@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { store } from './services/@redux/store';
 import { Routes } from './services/router';
 import { BrowserRouter } from 'react-router-dom';
+import 'simplebar/dist/simplebar.min.css';
 
 ReactDOM.render(
   <Provider store={store}>

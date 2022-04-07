@@ -1,0 +1,184 @@
+.container {
+  :global {
+    .simplebar-mask {
+      border-radius: 10px;
+    }
+  }
+
+  .scrollBody {
+    :global {
+      .simplebar-mask {
+        border-radius: 0 0 10px 10px;
+      }
+    }
+  }
+}
+
+.table {
+  width: 100%;
+  background-color: var(--background);
+  border-radius: 10px;
+  border-collapse: collapse;
+  height: 1px; // to make data cell height 100%
+
+  &.collapseBody {
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 1px;
+    tbody {
+      visibility: collapse;
+    }
+  }
+
+  &.collapseHead {
+    border-radius: 0 0 10px 10px;
+    thead {
+      visibility: collapse;
+      tr {
+        border: none;
+      }
+    }
+  }
+}
+.rowHead {
+  border-bottom: 1px solid var(--outline);
+  th {
+    padding: 16px;
+    text-align: left;
+    font-size: 12px;
+    line-height: 16px;
+    &:first-child {
+      padding-left: 24px;
+    }
+    &:last-child {
+      padding-right: 24px;
+    }
+  }
+}
+.rowBody {
+  &:last-child {
+    .dataCell {
+      border-bottom: none;
+    }
+  }
+  td {
+    padding: 0;
+    height: 100%;
+    &:first-child {
+      .dataCell {
+        margin-left: 24px;
+        padding-left: 0;
+      }
+    }
+    &:last-child {
+      .dataCell {
+        margin-right: 24px;
+        padding-right: 0;
+      }
+    }
+  }
+}
+.rowBodyGrouped {
+  background-color: var(--outline);
+}
+.dataCell {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  height: 100%;
+  border-bottom: 1px solid var(--outline);
+}
+.paginationWrapper {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+
+  div:nth-child(3) {
+    justify-self: end;
+    color: var(--grey-text);
+
+    input {
+      width: 44px;
+      border: 1px solid var(--outline);
+      border-radius: 4px;
+      padding: 0 4px;
+      margin-left: 6px;
+
+      &:focus {
+        outline: none;
+        border: 1px solid var(--on-background);
+      }
+    }
+
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Firefox */
+    input[type='number'] {
+      -moz-appearance: textfield;
+    }
+  }
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--on-background);
+  button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+    border: none;
+    background-color: unset;
+  }
+  .backButton {
+    margin-right: 40px;
+    svg {
+      transform: rotate(90deg);
+    }
+  }
+  .nextButton {
+    margin-left: 40px;
+    svg {
+      transform: rotate(-90deg);
+    }
+  }
+}
+
+// Checkbox style
+.checkboxInput {
+  appearance: none;
+  width: 0;
+  height: 0;
+  margin: 0;
+  opacity: 0;
+  &:checked + .checkbox {
+    border: 1px solid var(--primary);
+    background: var(--primary);
+    .checkIcon {
+      transform: rotate(0) scale(1);
+    }
+  }
+}
+.checkbox {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--primary);
+  border-radius: 1px;
+  width: 15px;
+  height: 15px;
+  transition: all ease 0.2s;
+}
+.disabledCheckbox {
+  border: 1px solid var(--outline);
+}
+.checkIcon {
+  transition: all ease 0.2s;
+  transform: rotate(90deg) scale(0);
+}

@@ -1,0 +1,193 @@
+.selectButton {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  user-select: none;
+}
+.buttonWrapper {
+  width: 100%;
+  height: 40px;
+  border-radius: 4px;
+  padding: 0 8px;
+  cursor: pointer;
+  background-color: var(--background);
+  display: flex;
+  align-items: center;
+  &.border {
+    border: 1px solid var(--outline);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  &.error {
+    border: 1px solid var(--error);
+  }
+}
+.errorWrapper {
+  display: flex;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--error);
+  margin-top: 9px;
+  svg {
+    flex-shrink: 0;
+    margin-right: 4.5px;
+  }
+}
+.searchInput {
+  padding: 0;
+  border: none;
+  outline: none;
+  width: 100%;
+  flex: 1;
+}
+.fixedLabel {
+  margin-right: 8px;
+  display: inline-flex;
+}
+.defaultLabel {
+  font-weight: normal;
+}
+.topLabel {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+.rightIcon {
+  display: inline-flex;
+}
+.selectedValue {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.numSelected {
+  color: var(--primary);
+  font-weight: normal;
+}
+.arrowWrapper {
+  transition: all 0.2s;
+  &.arrowUp {
+    transform: rotate(180deg);
+  }
+}
+.dropdownContainer {
+  @include box-shadow-1;
+  z-index: 3;
+  position: absolute;
+  top: calc(100% + 10px);
+  opacity: 1;
+  border-radius: 10px;
+  background-color: var(--background);
+  overflow: hidden;
+  animation-name: hide;
+  animation-duration: 0.2s;
+  animation-timing-function: ease;
+}
+.showHideAnimation {
+  animation-name: show;
+}
+@keyframes show {
+  from {
+    top: 100%;
+    opacity: 0;
+  }
+  to {
+    top: calc(100% + 10px);
+    opacity: 1;
+  }
+}
+@keyframes hide {
+  from {
+    top: calc(100% + 10px);
+    opacity: 1;
+  }
+  to {
+    top: 100%;
+    opacity: 0;
+  }
+}
+.allToggle {
+  padding: 8px;
+  text-align: right;
+  background-color: var(--outline);
+  color: var(--primary);
+  span {
+    transition: color ease 0.2s;
+    cursor: pointer;
+    &:hover {
+      color: var(--hover-primary);
+    }
+  }
+}
+.optionItem {
+  cursor: pointer;
+  padding: 12px 16px;
+  transition: all ease 0.2s;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  position: relative;
+  &:hover {
+    background-color: var(--outline);
+  }
+  &:first-child {
+    padding-top: 16px;
+  }
+  &:last-child {
+    padding-bottom: 16px;
+  }
+  &.notSelectable:hover {
+    background-color: unset;
+    cursor: default;
+  }
+  &.divider {
+    &:first-child::after {
+      content: unset;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      display: block;
+      width: calc(100% - 32px);
+      top: 0px;
+      border-bottom: 1px solid var(--outline);
+    }
+  }
+}
+.checkWrapper {
+  width: 16px;
+  height: 16px;
+}
+.checkbox {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--primary);
+  border-radius: 1px;
+  width: 12px;
+  height: 12px;
+  margin: 2px;
+  transition: all ease 0.2s;
+  &.checked {
+    border: 1px solid var(--primary);
+    background: var(--primary);
+    .checkIcon {
+      transform: rotate(0) scale(1);
+    }
+  }
+}
+.checkIcon {
+  transition: all ease 0.2s;
+  transform: rotate(90deg) scale(0);
+}
+
+.disabled {
+  .buttonWrapper,
+  .searchInput {
+    background: var(--outline);
+    color: var(--secondary);
+  }
+}

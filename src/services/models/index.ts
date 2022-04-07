@@ -17,3 +17,30 @@ export interface User {
   hint: { vie: number; eng: number };
   completedQuizzes: { vie: string[]; eng: string[] };
 }
+
+interface QuizProp {
+  _id: string;
+  content: string;
+  answer: string;
+  explaination?: string;
+  info?: string;
+  levelId: string;
+  levelNumber: number;
+}
+
+export type Quiz = (
+  | {
+      type: 'shuffleLetters' | 'shuffleIdiom';
+    }
+  | {
+      type: 'fillIdiom';
+      choices: string[];
+    }
+) &
+  QuizProp;
+
+export interface Level {
+  _id: string;
+  levelNumber: number;
+  quizIds: string[];
+}

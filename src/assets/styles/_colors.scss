@@ -1,5 +1,6 @@
 $primary-light: #2955cc;
 $on-primary-light: #ffffff;
+$hover-primary-light: #2954cce5;
 $primary-container-light: #dae1ff;
 $on-primary-container-light: #001552;
 $secondary-light: #625b71;
@@ -23,8 +24,10 @@ $surface-variant-light: #e7e0ec;
 $on-surface-variant-light: #49454f;
 $inverse-surface-light: #313033;
 $inverse-on-surface-light: #f4eff4;
+// dark
 $primary-dark: #b4c4ff;
 $on-primary-dark: #002781;
+$hover-primary-dark: #b4c4ffad;
 $primary-container-dark: #003ab3;
 $on-primary-container-dark: #dae1ff;
 $secondary-dark: #ccc2dc;
@@ -48,10 +51,12 @@ $surface-variant-dark: #49454f;
 $on-surface-variant-dark: #cac4d0;
 $inverse-surface-dark: #e6e1e5;
 $inverse-on-surface-dark: #1c1b1f;
+$transparent: #ffffff00;
 
 :root {
   --primary: #{$primary-light};
   --on-primary: #{$on-primary-light};
+  --hover-primary: #{$hover-primary-light};
   --primary-container: #{$primary-container-light};
   --on-primary-container: #{$on-primary-container-light};
   --secondary: #{$secondary-light};
@@ -75,10 +80,12 @@ $inverse-on-surface-dark: #1c1b1f;
   --on-surface-variant: #{$on-surface-variant-light};
   --inverse-surface: #{$inverse-surface-light};
   --inverse-on-surface: #{$inverse-on-surface-light};
+  --transparent: #{$transparent};
 }
 .dark {
   --primary: #{$primary-dark};
   --on-primary: #{$on-primary-dark};
+  --hover-primary: #{$hover-primary-dark};
   --primary-container: #{$primary-container-dark};
   --on-primary-container: #{$on-primary-container-dark};
   --secondary: #{$secondary-dark};
@@ -102,4 +109,5 @@ $inverse-on-surface-dark: #1c1b1f;
   --on-surface-variant: #{$on-surface-variant-dark};
   --inverse-surface: #{$inverse-surface-dark};
   --inverse-on-surface: #{$inverse-on-surface-dark};
+  --transparent: #{$transparent};
 }

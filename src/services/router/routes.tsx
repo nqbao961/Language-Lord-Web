@@ -1,10 +1,11 @@
-import { RouteObject, useRoutes } from 'react-router-dom';
+import { Outlet, RouteObject, useRoutes } from 'react-router-dom';
 import Admin from '../../pages/admin';
 import Dashboard from '../../pages/dashboard';
 import Levels from '../../pages/levels';
 import Login from '../../pages/login';
 import NotFound from '../../pages/notfound';
 import Play from '../../pages/play';
+import QuizCreate from '../../pages/quizCreate';
 import Quizzes from '../../pages/quizzes';
 import RequireAuth from '../../pages/requireAuth';
 import Users from '../../pages/users';
@@ -23,9 +24,18 @@ export const adminRoutes: RouteWithTitleObject[] = [
   },
   {
     path: 'quizzes',
-    element: <Quizzes />,
     title: 'Quizzes',
     faIcon: 'fa-puzzle',
+    children: [
+      {
+        index: true,
+        element: <Quizzes />,
+      },
+      {
+        path: 'create-quiz',
+        element: <QuizCreate />,
+      },
+    ],
   },
   {
     path: 'levels',

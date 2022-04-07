@@ -19,6 +19,7 @@
   background-color: var(--primary);
   color: var(--on-primary);
   border-radius: 16px 16px 0 0;
+  z-index: 99;
   transition: background-color 0.2s, color 0.2s;
 
   .tabLink {
@@ -63,6 +64,7 @@
   background-color: var(--primary);
   color: var(--on-primary);
   border-radius: 0 0 16px 16px;
+  z-index: 99;
   transition: background-color 0.2s, color 0.2s;
 }
 
