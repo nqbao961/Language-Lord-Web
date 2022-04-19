@@ -3,11 +3,13 @@ import { Button, Table } from '../../../components';
 import styles from './Quizzes.module.scss';
 import { ReactComponent as ChevronIcon } from '../../../assets/images/chevron.svg';
 import { Column } from 'react-table';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Quiz } from '../../../services/models';
+import { useAppDispatch, useAppSelector } from '../../../services/hooks';
+import { getQuizzes } from '../../../services/@redux/actions/quizzes';
 
 interface QuizzesData {
-  level: number;
+  level: string;
   content: string;
   answer: string;
 
@@ -15,8 +17,17 @@ interface QuizzesData {
 }
 
 export default function Quizzes() {
+  const dispatch = useAppDispatch();
+  const test = useAppSelector(state => state.quizzes);
+  console.log(test);
+
   const quizzes: Quiz[] = [];
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(getQuizzes());
+  }, [dispatch]);
+
   const columns: Column[] = useMemo(() => createColumns(), []);
   const data: QuizzesData[] = useMemo(
     () => createRowsData(quizzes, navigate),
@@ -67,7 +78,7 @@ function createRowsData(
   navigate: NavigateFunction
 ): QuizzesData[] {
   return quizzes.map(quiz => ({
-    level: quiz.levelNumber,
+    level: quiz.levelNumber?.toString() || '-',
     content: quiz.content,
     answer: quiz.answer,
     button: (

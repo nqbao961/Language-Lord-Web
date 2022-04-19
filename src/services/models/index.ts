@@ -24,8 +24,8 @@ interface QuizProp {
   answer: string;
   explaination?: string;
   info?: string;
-  levelId: string;
-  levelNumber: number;
+  levelId?: string;
+  levelNumber?: number;
 }
 
 export type Quiz = (
@@ -38,6 +38,10 @@ export type Quiz = (
     }
 ) &
   QuizProp;
+
+export type QuizCreate = Omit<Quiz, '_id' | 'levelId' | 'levelNumber'> & {
+  choices?: string[];
+};
 
 export interface Level {
   _id: string;
