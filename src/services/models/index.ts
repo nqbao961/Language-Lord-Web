@@ -48,3 +48,14 @@ export interface Level {
   levelNumber: number;
   quizIds: string[];
 }
+
+export interface Modal {
+  width?: number | string;
+  bodyMaxHeight?: number;
+  header?: JSX.Element | string;
+  body?: JSX.Element | string;
+  footer?: JSX.Element | string;
+  showClose?: boolean;
+  showCloseButton?: boolean;
+  allowEsc?: boolean;
+}

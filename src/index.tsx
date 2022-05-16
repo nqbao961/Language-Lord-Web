@@ -6,13 +6,20 @@ import { store } from './services/@redux/store';
 import { Routes } from './services/router';
 import { BrowserRouter } from 'react-router-dom';
 import 'simplebar/dist/simplebar.min.css';
+import { Loading, Modal } from './components';
+import './i18n';
+import { Suspense } from 'react';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <Routes />
-    </BrowserRouter>
-  </Provider>,
+  <Suspense fallback={<Loading loading />}>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes />
+      </BrowserRouter>
+      <Loading />
+      <Modal />
+    </Provider>
+  </Suspense>,
   document.getElementById('root')
 );
 

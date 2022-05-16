@@ -5,12 +5,14 @@ import vietnamFlag from '../../assets/images/vietnam.png';
 import usFlag from '../../assets/images/united-states.png';
 import { useEffect, useState } from 'react';
 import { User } from '../../services/models';
+import { useTranslation } from 'react-i18next';
 
 export function Sidebar() {
   const [lang, setLang] = useState<User['preferedLang']>(
     (localStorage.getItem('preferedLang') as User['preferedLang']) || 'vi'
   );
   const [theme, setTheme] = useState(localStorage.getItem('theme') || '');
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -19,6 +21,10 @@ export function Sidebar() {
       document.body.classList.remove('dark');
     }
   }, [theme]);
+
+  useEffect(() => {
+    lang && i18n.changeLanguage(lang);
+  }, [lang]);
 
   const navigate = useNavigate();
 
@@ -68,7 +74,7 @@ export function Sidebar() {
               onMouseDown={e => handleMouseDown(e)}
             >
               <i className={`fa-solid ${route.faIcon}`}></i>
-              <span>{route.title}</span>
+              <span>{t(route.title!)}</span>
             </NavLink>
           </li>
         ))}

@@ -6,11 +6,12 @@ import { Column } from 'react-table';
 import { useEffect, useMemo } from 'react';
 import { Quiz } from '../../../services/models';
 import { useAppDispatch, useAppSelector } from '../../../services/hooks';
-import { getQuizzes } from '../../../services/@redux/actions/quizzes';
+import { getQuizzes } from '../../../services/@redux/actions';
+import { TFunction, useTranslation } from 'react-i18next';
 
 interface QuizzesData {
   level: string;
-  content: string;
+  content: JSX.Element;
   answer: string;
 
   button: JSX.Element;
@@ -18,17 +19,16 @@ interface QuizzesData {
 
 export default function Quizzes() {
   const dispatch = useAppDispatch();
-  const test = useAppSelector(state => state.quizzes);
-  console.log(test);
+  const quizzes = useAppSelector(state => state.quizzes);
 
-  const quizzes: Quiz[] = [];
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     dispatch(getQuizzes());
   }, [dispatch]);
 
-  const columns: Column[] = useMemo(() => createColumns(), []);
+  const columns: Column[] = useMemo(() => createColumns(t), []);
   const data: QuizzesData[] = useMemo(
     () => createRowsData(quizzes, navigate),
     [quizzes]
@@ -52,18 +52,18 @@ export default function Quizzes() {
   );
 }
 
-function createColumns() {
+function createColumns(t: TFunction<'translation', undefined>) {
   return [
     {
-      Header: 'Level',
+      Header: t('Level'),
       accessor: 'level',
     },
     {
-      Header: 'Content',
+      Header: t('Content'),
       accessor: 'content',
     },
     {
-      Header: 'Answer',
+      Header: t('Answer'),
       accessor: 'answer',
     },
     {
@@ -79,7 +79,7 @@ function createRowsData(
 ): QuizzesData[] {
   return quizzes.map(quiz => ({
     level: quiz.levelNumber?.toString() || '-',
-    content: quiz.content,
+    content: <div className={styles.breakLine}>{quiz.content}</div>,
     answer: quiz.answer,
     button: (
       <div

@@ -1,6 +1,9 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button, Input, Select } from '../../../components';
-import { useInput, useSelect } from '../../../services/hooks';
+import { showModal } from '../../../services/@redux/actions';
+import { createQuiz } from '../../../services/@redux/actions/quizzes';
+import { useAppDispatch, useInput, useSelect } from '../../../services/hooks';
 import { Quiz } from '../../../services/models';
 import { shuffle } from '../../../services/utils';
 import styles from './QuizCreate.module.scss';
@@ -18,6 +21,9 @@ export default function QuizCreate() {
   const { states: choiceC, bind: bindChoiceC } = useInput();
   const { states: choiceD, bind: bindChoiceD } = useInput();
 
+  const dispatch = useAppDispatch();
+  const { t, i18n } = useTranslation();
+
   const quizTypes = useMemo<
     {
       content: string;
@@ -26,15 +32,15 @@ export default function QuizCreate() {
   >(
     () => [
       {
-        content: 'Shuffle Letters',
+        content: t('Shuffle Letters'),
         value: 'shuffleLetters',
       },
       {
-        content: 'Shuffle Idiom',
+        content: t('Shuffle Idiom'),
         value: 'shuffleIdiom',
       },
       {
-        content: 'Fill Idiom',
+        content: t('Fill Idiom'),
         value: 'fillIdiom',
       },
     ],
@@ -61,18 +67,85 @@ export default function QuizCreate() {
     }
   };
 
+  const wrappedUseSelectForType = (arg: any) => useSelect(arg);
+
+  const checkRequired = (
+    input:
+      | ReturnType<typeof useInput>['states']
+      | ReturnType<typeof wrappedUseSelectForType>['states'],
+    errorText: string
+  ) => {
+    !input.value ? input.setError(errorText) : input.setError('');
+  };
+
+  const validateForm = () => {
+    checkRequired(type, t('Please select a type'));
+    checkRequired(content, t('Please enter content'));
+    checkRequired(answer, t('Please enter answer'));
+    type.value === 'fillIdiom' &&
+      (checkRequired(choiceA, t('Please enter choice')),
+      checkRequired(choiceB, t('Please enter choice')),
+      checkRequired(choiceC, t('Please enter choice')),
+      checkRequired(choiceD, t('Please enter choice')));
+
+    return (
+      !!type.value &&
+      !!content.value &&
+      !!answer.value &&
+      ((type.value === 'fillIdiom' &&
+        !!choiceA.value &&
+        !!choiceB.value &&
+        !!choiceC.value &&
+        !!choiceD.value) ||
+        type.value !== 'fillIdiom')
+    );
+  };
+
+  const handleSubmit = () => {
+    if (validateForm()) {
+      dispatch(
+        createQuiz({
+          type: type.value!,
+          content: content.value,
+          answer: answer.value,
+          ...(explaination.value && { explaination: explaination.value }),
+          ...(info.value && { info: info.value }),
+          ...(choiceA.value &&
+            choiceB.value &&
+            choiceC.value &&
+            choiceD.value && {
+              choices: [
+                choiceA.value,
+                choiceB.value,
+                choiceC.value,
+                choiceD.value,
+              ],
+            }),
+        })
+      ).then(() => {
+        dispatch(
+          showModal({
+            header: 'header',
+            body: 'Oke',
+          })
+        );
+      });
+    }
+  };
+
   return (
     <div>
       <h1>Create Quiz</h1>
       <div className={styles.form}>
         <Select
-          topLabel="Type"
-          defaultLabel="Choose type"
+          topLabel={t('Type')}
+          defaultLabel={t('Choose type')}
           optionList={quizTypes}
           {...bindType}
         />
+        <Input id="answer" label={t('Answer')} {...bindAnswer} />
         <div className={styles.row}>
-          <Input id="content" label="Content" {...bindContent} />
+          <Input id="content" label={t('Content')} {...bindContent} />
           {type.value && type.value !== 'fillIdiom' && (
             <Button
               className={styles.shuffleButton}
@@ -81,7 +154,6 @@ export default function QuizCreate() {
             />
           )}
         </div>
-        <Input id="answer" label="Answer" {...bindAnswer} />
         {type.value && type.value === 'fillIdiom' && (
           <>
             <Input id="choiceA" label="Choice A" {...bindChoiceA} />
@@ -93,13 +165,17 @@ export default function QuizCreate() {
         <Input
           id="explaination"
           type="textarea"
-          label="Explaination"
+          label={t('Explaination')}
           {...bindExplaination}
         />
-        <Input id="info" label="Information" {...bindInfo} />
+        <Input id="info" label={t('Information')} {...bindInfo} />
         <div className={styles.buttonWrapper}>
-          <Button label="Cancel" type="transparent" />
-          <Button label="Create" type="danger" />
+          <Button label={t('Cancel')} type="transparent" />
+          <Button
+            label={t('Create')}
+            type="danger"
+            handleClick={handleSubmit}
+          />
         </div>
       </div>
     </div>

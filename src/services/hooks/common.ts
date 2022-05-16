@@ -24,19 +24,6 @@ export function useClickOutside(
 }
 
 /**
- * Hook that show hide Loader
- */
-export function useLoading(show: boolean) {
-  useEffect(() => {
-    if (show) {
-      document.body.classList.add('loading-show');
-    } else {
-      document.body.classList.remove('loading-show');
-    }
-  }, [show]);
-}
-
-/**
  * Hook that handle press Enter
  */
 export function usePressEnter(handleFunction: () => void, deps: any[] = []) {

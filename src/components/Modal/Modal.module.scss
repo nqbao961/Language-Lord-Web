@@ -1,0 +1,42 @@
+.container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: var(--transparent-black);
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.wrapper {
+  background-color: var(--background);
+  border-radius: 8px;
+  padding: 28px;
+  position: relative;
+  width: calc(100% - 40px);
+}
+
+.closeIcon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.header {
+  margin-bottom: 16px;
+  padding-right: 8px;
+}
+
+.body {
+  margin-bottom: 32px;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+}

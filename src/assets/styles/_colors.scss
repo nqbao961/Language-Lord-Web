@@ -51,7 +51,9 @@ $surface-variant-dark: #49454f;
 $on-surface-variant-dark: #cac4d0;
 $inverse-surface-dark: #e6e1e5;
 $inverse-on-surface-dark: #1c1b1f;
+
 $transparent: #ffffff00;
+$transparent-black: rgba(0, 0, 0, 0.3);
 
 :root {
   --primary: #{$primary-light};
@@ -81,6 +83,8 @@ $transparent: #ffffff00;
   --inverse-surface: #{$inverse-surface-light};
   --inverse-on-surface: #{$inverse-on-surface-light};
   --transparent: #{$transparent};
+  --transparent-black: #{$transparent-black};
+
 }
 .dark {
   --primary: #{$primary-dark};
@@ -110,4 +114,5 @@ $transparent: #ffffff00;
   --inverse-surface: #{$inverse-surface-dark};
   --inverse-on-surface: #{$inverse-on-surface-dark};
   --transparent: #{$transparent};
+  --transparent-black: #{$transparent-black};
 }

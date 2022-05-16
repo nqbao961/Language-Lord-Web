@@ -1,4 +1,4 @@
-import { Outlet, RouteObject, useRoutes } from 'react-router-dom';
+import { RouteObject, useRoutes } from 'react-router-dom';
 import Admin from '../../pages/admin';
 import Dashboard from '../../pages/dashboard';
 import Levels from '../../pages/levels';
