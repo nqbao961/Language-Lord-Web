@@ -1,6 +1,7 @@
 import { RouteObject, useRoutes } from 'react-router-dom';
 import Admin from '../../pages/admin';
 import Dashboard from '../../pages/dashboard';
+import LevelCreate from '../../pages/levelCreate';
 import Levels from '../../pages/levels';
 import Login from '../../pages/login';
 import NotFound from '../../pages/notfound';
@@ -39,9 +40,18 @@ export const adminRoutes: RouteWithTitleObject[] = [
   },
   {
     path: 'levels',
-    element: <Levels />,
     title: 'Levels',
     faIcon: 'fa-arrow-up-big-small',
+    children: [
+      {
+        index: true,
+        element: <Levels />,
+      },
+      {
+        path: 'create-level',
+        element: <LevelCreate />,
+      },
+    ],
   },
   {
     path: 'users',

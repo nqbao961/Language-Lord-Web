@@ -29,6 +29,7 @@ import {
   isSameOrAfter,
   isSameOrBefore,
 } from '../../services/utils';
+import { useTranslation } from 'react-i18next';
 
 type TableProps = {
   columns: Column[];
@@ -44,6 +45,7 @@ type TableProps = {
     [id: number]: boolean;
   };
   tbodyMaxHeight?: number;
+  tableMaxHeight?: number | string;
   hiddenColumns?: string[];
   groupByColumns?: string[];
   filters?: string[];
@@ -52,7 +54,10 @@ type TableProps = {
   manualFilterSort?: any;
   columnsFilters?: { [key: string]: string | number | (string | number)[] };
   sortByRules?: SortingRule<object>[];
-  handleSelectRow?: (selectedFlatRows: Row<object>[]) => void;
+  handleSelectRow?: (
+    selectedFlatRows: Row<object>[],
+    selectedRowIds: Record<string, boolean>
+  ) => void;
   onChangeRowLength?: (rowLength: number, rows: Row<object>[]) => void;
   fetchData?: (pageIndex: number) => void;
 };
@@ -69,6 +74,7 @@ export function Table({
   pageCountNumber,
   selectedRowIdsObj = {},
   tbodyMaxHeight,
+  tableMaxHeight,
   hiddenColumns = [],
   groupByColumns = [],
   filters,
@@ -81,6 +87,8 @@ export function Table({
   onChangeRowLength = () => {},
   fetchData,
 }: TableProps) {
+  const { t, i18n } = useTranslation();
+
   const searchQueryFilterFn = useCallback(
     (rows: Row[], ids: string[], query: string) => {
       if (filters && filters.length > 0) {
@@ -128,7 +136,7 @@ export function Table({
     rows,
     setFilter,
     setGlobalFilter,
-    state: { pageIndex },
+    state: { pageIndex, selectedRowIds },
   } = useTable(
     {
       columns,
@@ -237,7 +245,7 @@ export function Table({
   // End
 
   useEffect(() => {
-    handleSelectRow(selectedFlatRows);
+    handleSelectRow(selectedFlatRows, selectedRowIds);
   }, [selectedFlatRows]);
 
   useEffect(() => {
@@ -366,7 +374,20 @@ export function Table({
 
   return (
     <div className={styles.container}>
-      {minWidth ? <SimpleBar>{tableElement}</SimpleBar> : tableElement}
+      {minWidth ? (
+        tableMaxHeight ? (
+          <SimpleBar
+            className={styles.scrollBody}
+            style={{ maxHeight: tableMaxHeight }}
+          >
+            {tableElement}
+          </SimpleBar>
+        ) : (
+          <SimpleBar>{tableElement}</SimpleBar>
+        )
+      ) : (
+        tableElement
+      )}
       {data.length > 0 && (canNextPage || canPreviousPage) && (
         <div className={styles.paginationWrapper}>
           <div></div>
@@ -378,11 +399,16 @@ export function Table({
             >
               <ChevronIcon
                 style={{
-                  stroke: 'var(--blue-accent)',
+                  stroke: 'var(--primary)',
                 }}
               />
             </button>
-            <span>{'%0 out of %1 pages' + pageIndex + 1 + pageCount}</span>
+            <span>
+              {t('table out of pages', {
+                current: pageIndex + 1,
+                total: pageCount,
+              })}
+            </span>
             <button
               style={{ visibility: canNextPage ? 'visible' : 'hidden' }}
               onClick={() => nextPage()}
@@ -390,7 +416,7 @@ export function Table({
             >
               <ChevronIcon
                 style={{
-                  stroke: 'var(--blue-accent)',
+                  stroke: 'var(--primary)',
                 }}
               />
             </button>
@@ -398,7 +424,7 @@ export function Table({
           <div>
             {pageInput && (
               <>
-                {'Go to page' + ':'}
+                {t('Go to page') + ':'}
                 <input
                   type="number"
                   defaultValue={pageIndex + 1}
@@ -430,7 +456,10 @@ const IndeterminateCheckbox = forwardRef(
     const defaultRef = useRef<any>(null);
 
     return (
-      <label onClick={e => e.stopPropagation()}>
+      <label
+        className={styles.checkboxLabel}
+        onClick={e => e.stopPropagation()}
+      >
         <input
           className={styles.checkboxInput}
           type="checkbox"
@@ -445,7 +474,7 @@ const IndeterminateCheckbox = forwardRef(
         >
           <CheckIcon
             className={styles.checkIcon}
-            style={{ stroke: ' var(--white)' }}
+            style={{ stroke: ' var(--background)' }}
           />
         </div>
       </label>

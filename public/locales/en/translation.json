@@ -1,12 +1,16 @@
 {
   "Answer": "Answer",
   "Cancel": "Cancel",
+  "Choice": "Choice {{char}}",
   "Choose type": "Choose type",
   "Content": "Content",
+  "Create Level": "Create Level",
+  "Create Quiz": "Create Quiz",
   "Create": "Create",
   "Dashboard": "Dashboard",
   "Explaination": "Explaination",
   "Fill Idiom": "Fill Idiom",
+  "Go to page": "Go to page",
   "Information": "Information",
   "Level": "Level",
   "Levels": "Levels",
@@ -17,6 +21,7 @@
   "Quizzes": "Quizzes",
   "Shuffle Idiom": "Shuffle Idiom",
   "Shuffle Letters": "Shuffle Letters",
+  "table out of pages": "{{current}} out of {{total}} pages",
   "Type": "Type",
   "Users": "Users"
 }

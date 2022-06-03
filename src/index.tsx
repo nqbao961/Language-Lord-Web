@@ -6,7 +6,7 @@ import { store } from './services/@redux/store';
 import { Routes } from './services/router';
 import { BrowserRouter } from 'react-router-dom';
 import 'simplebar/dist/simplebar.min.css';
-import { Loading, Modal } from './components';
+import { Loading } from './components';
 import './i18n';
 import { Suspense } from 'react';
 
@@ -17,7 +17,6 @@ ReactDOM.render(
         <Routes />
       </BrowserRouter>
       <Loading />
-      <Modal />
     </Provider>
   </Suspense>,
   document.getElementById('root')

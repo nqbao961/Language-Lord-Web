@@ -40,7 +40,7 @@ export default function Quizzes() {
 
   return (
     <div>
-      <h1>Quizzes</h1>
+      <h1>{t('Quizzes')}</h1>
       <Button
         className={styles.createButton}
         kind="fab"

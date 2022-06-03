@@ -1,2 +1,2 @@
-export * from './app';
 export * from './quizzes';
+export * from './levels';

@@ -43,19 +43,19 @@ export type QuizCreate = Omit<Quiz, '_id' | 'levelId' | 'levelNumber'> & {
   choices?: string[];
 };
 
-export interface Level {
-  _id: string;
+export interface LevelCreate {
   levelNumber: number;
   quizIds: string[];
 }
 
-export interface Modal {
-  width?: number | string;
-  bodyMaxHeight?: number;
-  header?: JSX.Element | string;
-  body?: JSX.Element | string;
-  footer?: JSX.Element | string;
-  showClose?: boolean;
-  showCloseButton?: boolean;
-  allowEsc?: boolean;
+export interface Level {
+  _id: string;
+  levelNumber: number;
+  quizIds: string[];
+  quizzes: Quiz[];
+}
+
+export interface TypedAction<T = any> {
+  type: string;
+  payload: T;
 }

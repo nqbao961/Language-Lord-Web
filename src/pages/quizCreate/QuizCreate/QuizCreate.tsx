@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Input, Select } from '../../../components';
-import { showModal } from '../../../services/@redux/actions';
+import { Button, Input, Select, Modal } from '../../../components';
+import { ModalImperativeType } from '../../../components/Modal/Modal';
 import { createQuiz } from '../../../services/@redux/actions/quizzes';
 import { useAppDispatch, useInput, useSelect } from '../../../services/hooks';
 import { Quiz } from '../../../services/models';
@@ -20,6 +20,7 @@ export default function QuizCreate() {
   const { states: choiceB, bind: bindChoiceB } = useInput();
   const { states: choiceC, bind: bindChoiceC } = useInput();
   const { states: choiceD, bind: bindChoiceD } = useInput();
+  const submitedModalRef = useRef<ModalImperativeType>(null);
 
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation();
@@ -123,19 +124,14 @@ export default function QuizCreate() {
             }),
         })
       ).then(() => {
-        dispatch(
-          showModal({
-            header: 'header',
-            body: 'Oke',
-          })
-        );
+        submitedModalRef.current!.showModal();
       });
     }
   };
 
   return (
     <div>
-      <h1>Create Quiz</h1>
+      <h1>{t('Create Quiz')}</h1>
       <div className={styles.form}>
         <Select
           topLabel={t('Type')}
@@ -156,10 +152,26 @@ export default function QuizCreate() {
         </div>
         {type.value && type.value === 'fillIdiom' && (
           <>
-            <Input id="choiceA" label="Choice A" {...bindChoiceA} />
-            <Input id="choiceB" label="Choice B" {...bindChoiceB} />
-            <Input id="choiceC" label="Choice C" {...bindChoiceC} />
-            <Input id="choiceD" label="Choice D" {...bindChoiceD} />
+            <Input
+              id="choiceA"
+              label={t('Choice', { char: 'A' })}
+              {...bindChoiceA}
+            />
+            <Input
+              id="choiceB"
+              label={t('Choice', { char: 'B' })}
+              {...bindChoiceB}
+            />
+            <Input
+              id="choiceC"
+              label={t('Choice', { char: 'C' })}
+              {...bindChoiceC}
+            />
+            <Input
+              id="choiceD"
+              label={t('Choice', { char: 'D' })}
+              {...bindChoiceD}
+            />
           </>
         )}
         <Input
@@ -178,6 +190,7 @@ export default function QuizCreate() {
           />
         </div>
       </div>
+      <Modal ref={submitedModalRef} body={'Oke'} />
     </div>
   );
 }

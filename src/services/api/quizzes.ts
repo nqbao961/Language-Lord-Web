@@ -10,7 +10,7 @@ export const getQuizzes = (): APIResponse<Quiz[]> =>
     method: 'GET',
   });
 
-export const getQuiz = (id: number): APIResponse<Quiz> =>
+export const getQuiz = (id: string): APIResponse<Quiz> =>
   instance.request({
     url: `/quizzes/${id}`,
     method: 'GET',
@@ -23,14 +23,14 @@ export const createQuiz = (quiz: QuizCreate): APIResponse<Quiz> =>
     data: quiz,
   });
 
-export const updateQuiz = (id: number, quiz: QuizCreate): APIResponse<Quiz> =>
+export const updateQuiz = (id: string, quiz: QuizCreate): APIResponse<Quiz> =>
   instance.request({
     url: `/quizzes/${id}`,
     method: 'PUT',
     data: quiz,
   });
 
-export const deleteQuiz = (id: number): APIResponse<any> =>
+export const deleteQuiz = (id: string): APIResponse<any> =>
   instance.request({
     url: `/quizzes/${id}`,
     method: 'DELETE',

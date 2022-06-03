@@ -151,6 +151,10 @@
 }
 
 // Checkbox style
+.checkboxLabel {
+  display: flex;
+  cursor: pointer;
+}
 .checkboxInput {
   appearance: none;
   width: 0;
