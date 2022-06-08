@@ -1,6 +1,10 @@
-export const CREATE = 'CREATE';
-export const UPDATE = 'UPDATE';
-export const DELETE = 'DELETE';
-export const GET_ALL = 'GET_ALL';
+export const GET_ALL_QUIZZES = 'GET_ALL_QUIZZES';
+export const CREATE_QUIZ = 'CREATE_QUIZ';
+export const UPDATE_QUIZ = 'UPDATE_QUIZ';
+export const DELETE_QUIZ = 'DELETE_QUIZ';
+export const GET_ALL_LEVELS = 'GET_ALL_LEVELS';
+export const CREATE_LEVEL = 'CREATE_LEVEL';
+export const UPDATE_LEVEL = 'UPDATE_LEVEL';
+export const DELETE_LEVEL = 'DELETE_LEVEL';
 export const SHOW_LOADING = 'SHOW_LOADING';
 export const HIDE_LOADING = 'HIDE_LOADING';

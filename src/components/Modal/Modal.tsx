@@ -136,13 +136,13 @@ function Modal(
   }, [show]);
 
   return (
-    <div ref={divRef}>
+    <>
       {keepAlive
         ? createPortal(modalEl, modalRootEl!)
         : show
         ? createPortal(modalEl, modalRootEl!)
         : null}
-    </div>
+    </>
   );
 }
 

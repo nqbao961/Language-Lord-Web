@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { Level, LevelCreate } from '../models';
-import { instance } from './config';
+import { instance, lang } from './config';
 
 type APIResponse<T> = Promise<AxiosResponse<T, any>>;
 
@@ -8,6 +8,7 @@ export const getLevels = (): APIResponse<Level[]> =>
   instance.request({
     url: '/levels',
     method: 'GET',
+    params: { lang },
   });
 
 export const getLevel = (id: string): APIResponse<Level> =>

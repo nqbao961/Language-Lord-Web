@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import styles from './Play.module.scss';
 
 export default function Play() {
   const navigate = useNavigate();
@@ -9,8 +10,7 @@ export default function Play() {
   };
 
   return (
-    <div>
-      <Link to="/admin">Admin</Link>
+    <div className={styles.container}>
       <button onClick={logout}>Logout</button>
       Play
     </div>

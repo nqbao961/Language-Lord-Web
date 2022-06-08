@@ -45,14 +45,13 @@ export type QuizCreate = Omit<Quiz, '_id' | 'levelId' | 'levelNumber'> & {
 
 export interface LevelCreate {
   levelNumber: number;
-  quizIds: string[];
+  quizList: string[];
 }
 
 export interface Level {
   _id: string;
   levelNumber: number;
-  quizIds: string[];
-  quizzes: Quiz[];
+  quizList: Quiz[];
 }
 
 export interface TypedAction<T = any> {

@@ -1,8 +1,18 @@
-.centresWrapper,
-.submitButton {
+.centresWrapper {
   margin-top: 20px;
+}
+
+.addButton {
+  margin-bottom: 20px;
 }
 
 .buttonCell {
   cursor: pointer;
+  color: var(--primary);
+}
+
+.buttonWrapper {
+  display: flex;
+  margin-top: 18px;
+  gap: 10px;
 }

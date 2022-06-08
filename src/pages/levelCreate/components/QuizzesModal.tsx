@@ -84,7 +84,7 @@ export default function QuizzesModal({
   return (
     <Modal
       ref={addQuizModalRef}
-      header={'S'}
+      header={t('Select quizzes')}
       body={quizzesTableEl}
       keepAlive
       handleOkay={() => {

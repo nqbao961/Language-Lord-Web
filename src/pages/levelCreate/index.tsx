@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row } from 'react-table';
-import { Button } from '../../components';
+import { Button, Input } from '../../components';
 import styles from './LevelCreate.module.scss';
-import { getQuizzes } from '../../services/@redux/actions';
-import { useAppDispatch, useModalRef } from '../../services/hooks';
+import { createLevel, getQuizzes } from '../../services/@redux/actions';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useInput,
+  useModalRef,
+} from '../../services/hooks';
 import QuizzesModal from './components/QuizzesModal';
 import QuizzesTable from './components/QuizzesTable';
 
@@ -13,20 +18,42 @@ export default function LevelCreate() {
   const addQuizModalRef = useModalRef();
   const [quizList, setQuizList] = useState<Row<object>[]>([]);
   const dispatch = useAppDispatch();
+  const { states: levelNumber, bind: bindLevelNumber } = useInput();
+
+  const validate = () => {
+    levelNumber.value === ''
+      ? levelNumber.setError(t('Please enter a number'))
+      : parseInt(levelNumber.value) <= 0
+      ? levelNumber.setError(t('Invalid number'))
+      : levelNumber.setError('');
+
+    return levelNumber.value !== '' && parseInt(levelNumber.value) > 0;
+  };
 
   const submitLevel = () => {
-    const quizIdsList = quizList.map(row => row.values.id);
-    console.log(quizIdsList);
+    const quizIdsList = quizList.map(row => row.values.id as string);
+
+    if (validate()) {
+      dispatch(
+        createLevel({
+          levelNumber: parseInt(levelNumber.value),
+          quizList: quizIdsList,
+        })
+      ).then(() => {
+        dispatch(getQuizzes({ notInLevel: true }));
+      });
+    }
   };
 
   useEffect(() => {
-    dispatch(getQuizzes());
+    dispatch(getQuizzes({ notInLevel: true }));
   }, [dispatch]);
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>{t('Create Level')}</h1>
       <Button
+        className={styles.addButton}
         label={t('Add Quizzes')}
         handleClick={() => addQuizModalRef.current!.showModal()}
       />
@@ -34,15 +61,17 @@ export default function LevelCreate() {
         addQuizModalRef={addQuizModalRef}
         setQuizList={setQuizList}
       />
-      {quizList.length > 0 && (
+      <Input id="info" type="number" label={t('Level')} {...bindLevelNumber} />
+      {quizList.length > 0 ? (
         <>
           <QuizzesTable quizList={quizList} setQuizList={setQuizList} />
-          <Button
-            className={styles.submitButton}
-            label={t('Create')}
-            handleClick={() => submitLevel()}
-          />
+          <div className={styles.buttonWrapper}>
+            <Button label={t('Cancel')} type="transparent" />
+            <Button label={t('Create')} handleClick={() => submitLevel()} />
+          </div>
         </>
+      ) : (
+        <p>{t('Please add quizzes')}</p>
       )}
     </div>
   );

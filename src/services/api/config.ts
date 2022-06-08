@@ -11,3 +11,5 @@ export const instance = axios.create({
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   },
 });
+
+export const lang = localStorage.getItem('preferedLang') || 'en';

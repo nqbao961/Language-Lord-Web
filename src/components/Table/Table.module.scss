@@ -89,8 +89,13 @@
 }
 .paginationWrapper {
   margin-top: 20px;
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  display: flex;
+  flex-direction: column;
+
+  @include desktop {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+  }
 
   div:nth-child(3) {
     justify-self: end;

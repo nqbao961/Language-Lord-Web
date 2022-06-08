@@ -1,7 +1,7 @@
 import * as api from '../../api';
 import { LevelCreate } from '../../models';
 import { handleCallApi } from '../utils';
-import { CREATE, GET_ALL } from '../actionTypes';
+import { CREATE_LEVEL, GET_ALL_LEVELS } from '../actionTypes';
 import { AppDispatch, AppThunk } from '../store';
 
 export const getLevels =
@@ -9,7 +9,9 @@ export const getLevels =
     return handleCallApi(dispatch, async () => {
       const { data } = await api.getLevels();
 
-      dispatch({ type: GET_ALL, payload: data });
+      dispatch({ type: GET_ALL_LEVELS, payload: data });
+
+      return data;
     });
   };
 
@@ -18,6 +20,8 @@ export const createLevel =
     return handleCallApi(dispatch, async () => {
       const { data } = await api.createLevel(level);
 
-      dispatch({ type: CREATE, payload: data });
+      dispatch({ type: CREATE_LEVEL, payload: data });
+
+      return data;
     });
   };

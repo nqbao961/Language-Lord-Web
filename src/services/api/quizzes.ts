@@ -1,13 +1,12 @@
-import { AxiosResponse } from 'axios';
 import { Quiz, QuizCreate } from '../models';
-import { instance } from './config';
+import { instance, lang } from './config';
+import { APIResponse, getQuizzesParams } from './type';
 
-type APIResponse<T> = Promise<AxiosResponse<T, any>>;
-
-export const getQuizzes = (): APIResponse<Quiz[]> =>
+export const getQuizzes = (params?: getQuizzesParams): APIResponse<Quiz[]> =>
   instance.request({
     url: '/quizzes',
     method: 'GET',
+    params: { lang, ...(params && params) },
   });
 
 export const getQuiz = (id: string): APIResponse<Quiz> =>

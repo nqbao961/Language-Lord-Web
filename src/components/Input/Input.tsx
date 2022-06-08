@@ -7,7 +7,7 @@ type InputProps = {
   value: any;
   label?: string;
   optionalLabel?: string;
-  type?: 'textarea' | 'text';
+  type?: 'textarea' | 'text' | 'number';
   error?: string;
   placeholder?: string;
   rightIcon?: Element | ReactElement;

@@ -1,15 +1,19 @@
 import * as api from '../../api';
 import { QuizCreate } from '../../models';
 import { handleCallApi } from '../utils';
-import { CREATE, GET_ALL } from '../actionTypes';
+import { CREATE_QUIZ, GET_ALL_QUIZZES } from '../actionTypes';
 import { AppDispatch, AppThunk } from '../store';
+import { getQuizzesParams } from '../../api/type';
 
 export const getQuizzes =
-  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch) => {
+  (params?: getQuizzesParams): AppThunk<Promise<void>> =>
+  async (dispatch: AppDispatch) => {
     return handleCallApi(dispatch, async () => {
-      const { data } = await api.getQuizzes();
+      const { data } = await api.getQuizzes(params);
 
-      dispatch({ type: GET_ALL, payload: data });
+      dispatch({ type: GET_ALL_QUIZZES, payload: data });
+
+      return data;
     });
   };
 
@@ -18,6 +22,8 @@ export const createQuiz =
     return handleCallApi(dispatch, async () => {
       const { data } = await api.createQuiz(quiz);
 
-      dispatch({ type: CREATE, payload: data });
+      dispatch({ type: CREATE_QUIZ, payload: data });
+
+      return data;
     });
   };

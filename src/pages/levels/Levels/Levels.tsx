@@ -10,8 +10,8 @@ import { getLevels } from '../../../services/@redux/actions';
 import { TFunction, useTranslation } from 'react-i18next';
 
 interface LevelzesData {
-  levelNo: string;
-  quizzes: JSX.Element;
+  levelNo: number;
+  quizList: JSX.Element;
 
   button: JSX.Element;
 }
@@ -55,15 +55,11 @@ function createColumns(t: TFunction<'translation', undefined>) {
   return [
     {
       Header: t('Level'),
-      accessor: 'level',
+      accessor: 'levelNo',
     },
     {
-      Header: t('Content'),
-      accessor: 'content',
-    },
-    {
-      Header: t('Answer'),
-      accessor: 'answer',
+      Header: t('Quiz list'),
+      accessor: 'quizList',
     },
     {
       Header: '',
@@ -77,8 +73,14 @@ function createRowsData(
   navigate: NavigateFunction
 ): LevelzesData[] {
   return levels.map(level => ({
-    levelNo: level.levelNumber?.toString() || '-',
-    quizzes: <div className={styles.breakLine}>{level.quizzes}</div>,
+    levelNo: level.levelNumber,
+    quizList: (
+      <ol className={styles.breakLine}>
+        {level.quizList.map((quiz, index) => (
+          <li key={index}>{quiz.content}</li>
+        ))}
+      </ol>
+    ),
     button: (
       <div
         className={styles.buttonCell}

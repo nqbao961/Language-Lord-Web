@@ -22,17 +22,22 @@ export function handleNetworkError(e: any) {
   });
 
   console.log(error || 'Network Error');
+  return error || 'Network Error';
 }
 
 export async function handleCallApi(
   dispatch: AppDispatch,
   tryFunc: () => Promise<any>
 ) {
+  let result;
   dispatch({ type: SHOW_LOADING });
   try {
-    await tryFunc();
+    result = await tryFunc();
+    dispatch({ type: HIDE_LOADING });
+    return result;
   } catch (error) {
-    handleNetworkError(error);
+    result = handleNetworkError(error);
+    dispatch({ type: HIDE_LOADING });
+    throw result;
   }
-  dispatch({ type: HIDE_LOADING });
 }
