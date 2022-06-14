@@ -11,7 +11,7 @@ export const getLevels = (): APIResponse<Level[]> =>
     params: { lang },
   });
 
-export const getLevel = (id: string): APIResponse<Level> =>
+export const getLevel = (id: number): APIResponse<Level> =>
   instance.request({
     url: `/levels/${id}`,
     method: 'GET',

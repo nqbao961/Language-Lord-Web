@@ -10,12 +10,12 @@ export interface User {
   _id: string;
   email: string;
   role: 'admin' | 'user';
-  avatar: string;
+  avatar?: string;
   preferedLang: 'en' | 'vi';
-  level: { vie: number; eng: number };
-  score: { vie: number; eng: number };
-  hint: { vie: number; eng: number };
-  completedQuizzes: { vie: string[]; eng: string[] };
+  level: { vi: number; en: number };
+  score: { vi: number; en: number };
+  hint: { vi: number; en: number };
+  completedQuizzes: { vi: Quiz['_id'][]; en: Quiz['_id'][] };
 }
 
 interface QuizProp {
