@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { store } from '../@redux/store';
 
 const token = localStorage.getItem('token');
 
@@ -12,4 +13,4 @@ export const instance = axios.create({
   },
 });
 
-export const lang = localStorage.getItem('preferedLang') || 'en';
+export const getLang = () => store.getState().user.preferedLang;

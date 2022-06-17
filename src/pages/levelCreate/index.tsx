@@ -18,6 +18,7 @@ export default function LevelCreate() {
   const addQuizModalRef = useModalRef();
   const [quizList, setQuizList] = useState<Row<object>[]>([]);
   const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.user);
   const { states: levelNumber, bind: bindLevelNumber } = useInput();
 
   const validate = () => {
@@ -30,6 +31,11 @@ export default function LevelCreate() {
     return levelNumber.value !== '' && parseInt(levelNumber.value) > 0;
   };
 
+  const resetForm = () => {
+    setQuizList([]);
+    levelNumber.setValue('');
+  };
+
   const submitLevel = () => {
     const quizIdsList = quizList.map(row => row.values.id as string);
 
@@ -38,9 +44,11 @@ export default function LevelCreate() {
         createLevel({
           levelNumber: parseInt(levelNumber.value),
           quizList: quizIdsList,
+          language: user.preferedLang,
         })
       ).then(() => {
         dispatch(getQuizzes({ notInLevel: true }));
+        resetForm();
       });
     }
   };

@@ -12,7 +12,7 @@ export interface User {
   role: 'admin' | 'user';
   avatar?: string;
   preferedLang: 'en' | 'vi';
-  level: { vi: number; en: number };
+  level: { vi: string; en: string };
   score: { vi: number; en: number };
   hint: { vi: number; en: number };
   completedQuizzes: { vi: Quiz['_id'][]; en: Quiz['_id'][] };
@@ -26,6 +26,7 @@ interface QuizProp {
   info?: string;
   levelId?: string;
   levelNumber?: number;
+  language: 'en' | 'vi';
 }
 
 export type Quiz = (
@@ -33,7 +34,7 @@ export type Quiz = (
       type: 'shuffleLetters' | 'shuffleIdiom';
     }
   | {
-      type: 'fillIdiom';
+      type: 'multipleChoice';
       choices: string[];
     }
 ) &
@@ -46,12 +47,14 @@ export type QuizCreate = Omit<Quiz, '_id' | 'levelId' | 'levelNumber'> & {
 export interface LevelCreate {
   levelNumber: number;
   quizList: string[];
+  language: 'en' | 'vi';
 }
 
 export interface Level {
   _id: string;
   levelNumber: number;
   quizList: Quiz[];
+  language: 'en' | 'vi';
 }
 
 export interface TypedAction<T = any> {

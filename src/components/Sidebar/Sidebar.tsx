@@ -6,11 +6,12 @@ import usFlag from '../../assets/images/united-states.png';
 import { useEffect, useState } from 'react';
 import { User } from '../../services/models';
 import { useTranslation } from 'react-i18next';
+import { useAppDispatch, useAppSelector } from '../../services/hooks';
+import { updateUserLang } from '../../services/@redux/actions';
 
 export function Sidebar() {
-  const [lang, setLang] = useState<User['preferedLang']>(
-    (localStorage.getItem('preferedLang') as User['preferedLang']) || 'vi'
-  );
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.user);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || '');
   const { t, i18n } = useTranslation();
 
@@ -23,8 +24,8 @@ export function Sidebar() {
   }, [theme]);
 
   useEffect(() => {
-    lang && i18n.changeLanguage(lang);
-  }, [lang]);
+    user.preferedLang && i18n.changeLanguage(user.preferedLang);
+  }, [user.preferedLang]);
 
   const navigate = useNavigate();
 
@@ -46,8 +47,7 @@ export function Sidebar() {
   };
 
   const changeLang = (lang: User['preferedLang']) => {
-    localStorage.setItem('preferedLang', lang);
-    setLang(lang);
+    dispatch(updateUserLang(lang));
   };
 
   const changeTheme = (theme: string) => {
@@ -85,13 +85,13 @@ export function Sidebar() {
         <div className={styles.actionContainer}>
           <div className={styles.language}>
             <img
-              className={lang === 'vi' ? styles.active : ''}
+              className={user.preferedLang === 'vi' ? styles.active : ''}
               src={vietnamFlag}
               alt="vietnam-flag"
               onClick={() => changeLang('vi')}
             />
             <img
-              className={lang === 'en' ? styles.active : ''}
+              className={user.preferedLang === 'en' ? styles.active : ''}
               src={usFlag}
               alt="us-flag"
               onClick={() => changeLang('en')}

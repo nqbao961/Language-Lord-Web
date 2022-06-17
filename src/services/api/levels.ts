@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { Level, LevelCreate } from '../models';
-import { instance, lang } from './config';
+import { getLang, instance } from './config';
 
 type APIResponse<T> = Promise<AxiosResponse<T, any>>;
 
@@ -8,10 +8,10 @@ export const getLevels = (): APIResponse<Level[]> =>
   instance.request({
     url: '/levels',
     method: 'GET',
-    params: { lang },
+    params: { lang: getLang() },
   });
 
-export const getLevel = (id: number): APIResponse<Level> =>
+export const getLevel = (id: string): APIResponse<Level> =>
   instance.request({
     url: `/levels/${id}`,
     method: 'GET',
@@ -22,6 +22,7 @@ export const createLevel = (level: LevelCreate): APIResponse<Level> =>
     url: '/levels',
     method: 'POST',
     data: level,
+    params: { lang: getLang() },
   });
 
 export const updateLevel = (

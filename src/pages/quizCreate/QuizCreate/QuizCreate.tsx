@@ -3,7 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { Button, Input, Select, Modal } from '../../../components';
 import { ModalImperativeType } from '../../../components/Modal/Modal';
 import { createQuiz } from '../../../services/@redux/actions/quizzes';
-import { useAppDispatch, useInput, useSelect } from '../../../services/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useInput,
+  useSelect,
+} from '../../../services/hooks';
 import { Quiz } from '../../../services/models';
 import { shuffle } from '../../../services/utils';
 import styles from './QuizCreate.module.scss';
@@ -23,6 +28,7 @@ export default function QuizCreate() {
   const submitedModalRef = useRef<ModalImperativeType>(null);
 
   const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.user);
   const { t, i18n } = useTranslation();
 
   const quizTypes = useMemo<
@@ -41,8 +47,8 @@ export default function QuizCreate() {
         value: 'shuffleIdiom',
       },
       {
-        content: t('Fill Idiom'),
-        value: 'fillIdiom',
+        content: t('Multiple Choice'),
+        value: 'multipleChoice',
       },
     ],
     []
@@ -83,7 +89,7 @@ export default function QuizCreate() {
     checkRequired(type, t('Please select a type'));
     checkRequired(content, t('Please enter content'));
     checkRequired(answer, t('Please enter answer'));
-    type.value === 'fillIdiom' &&
+    type.value === 'multipleChoice' &&
       (checkRequired(choiceA, t('Please enter choice')),
       checkRequired(choiceB, t('Please enter choice')),
       checkRequired(choiceC, t('Please enter choice')),
@@ -93,13 +99,25 @@ export default function QuizCreate() {
       !!type.value &&
       !!content.value &&
       !!answer.value &&
-      ((type.value === 'fillIdiom' &&
+      ((type.value === 'multipleChoice' &&
         !!choiceA.value &&
         !!choiceB.value &&
         !!choiceC.value &&
         !!choiceD.value) ||
-        type.value !== 'fillIdiom')
+        type.value !== 'multipleChoice')
     );
+  };
+
+  const resetForm = () => {
+    type.setValue(undefined);
+    content.setValue('');
+    answer.setValue('');
+    explaination.setValue('');
+    info.setValue('');
+    choiceA.setValue('');
+    choiceB.setValue('');
+    choiceC.setValue('');
+    choiceD.setValue('');
   };
 
   const handleSubmit = () => {
@@ -109,6 +127,7 @@ export default function QuizCreate() {
           type: type.value!,
           content: content.value,
           answer: answer.value,
+          language: user.preferedLang,
           ...(explaination.value && { explaination: explaination.value }),
           ...(info.value && { info: info.value }),
           ...(choiceA.value &&
@@ -125,6 +144,7 @@ export default function QuizCreate() {
         })
       ).then(() => {
         submitedModalRef.current!.showModal();
+        resetForm();
       });
     }
   };
@@ -142,7 +162,7 @@ export default function QuizCreate() {
         <Input id="answer" label={t('Answer')} {...bindAnswer} />
         <div className={styles.row}>
           <Input id="content" label={t('Content')} {...bindContent} />
-          {type.value && type.value !== 'fillIdiom' && (
+          {type.value && type.value !== 'multipleChoice' && (
             <Button
               className={styles.shuffleButton}
               label={<i className="fa-solid fa-shuffle"></i>}
@@ -150,7 +170,7 @@ export default function QuizCreate() {
             />
           )}
         </div>
-        {type.value && type.value === 'fillIdiom' && (
+        {type.value && type.value === 'multipleChoice' && (
           <>
             <Input
               id="choiceA"

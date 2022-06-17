@@ -1,12 +1,12 @@
 import { Quiz, QuizCreate } from '../models';
-import { instance, lang } from './config';
+import { getLang, instance } from './config';
 import { APIResponse, getQuizzesParams } from './type';
 
 export const getQuizzes = (params?: getQuizzesParams): APIResponse<Quiz[]> =>
   instance.request({
     url: '/quizzes',
     method: 'GET',
-    params: { lang, ...(params && params) },
+    params: { lang: getLang(), ...(params && params) },
   });
 
 export const getQuiz = (id: string): APIResponse<Quiz> =>

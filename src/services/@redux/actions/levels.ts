@@ -16,7 +16,7 @@ export const getLevels =
   };
 
 export const getLevel =
-  (levelId: number): AppThunk<Promise<Level>> =>
+  (levelId: string): AppThunk<Promise<Level>> =>
   async (dispatch: AppDispatch) => {
     return handleCallApi(dispatch, async () => {
       const { data } = await api.getLevel(levelId);
