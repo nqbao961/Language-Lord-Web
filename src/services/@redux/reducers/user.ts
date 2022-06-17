@@ -14,7 +14,7 @@ const defaultUserState: User = {
   email: '',
   role: 'user',
   preferedLang: 'en',
-  level: { vi: 'vi-1', en: 'en-1' },
+  level: { vi: 1, en: 1 },
   score: { vi: 0, en: 0 },
   hint: { vi: 3, en: 3 },
   completedQuizzes: { vi: [], en: [] },
@@ -37,7 +37,7 @@ export default (user = defaultUserState, action: AnyAction) => {
 
     case UPDATE_USER_LEVEL:
       const level = { ...user.level };
-      level[lang] = `${lang}-${action.payload}`;
+      level[lang] = action.payload;
 
       return {
         ...user,

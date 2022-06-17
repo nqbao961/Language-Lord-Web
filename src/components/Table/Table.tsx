@@ -70,7 +70,7 @@ export function Table({
   rowSelectAtLast = false,
   minWidth,
   pageInput,
-  pageNumber = 8,
+  pageNumber = 10,
   pageCountNumber,
   selectedRowIdsObj = {},
   tbodyMaxHeight,
@@ -143,7 +143,7 @@ export function Table({
       data,
       initialState: {
         pageIndex: 0,
-        pageSize: pageNumber || 8,
+        pageSize: pageNumber || 10,
         selectedRowIds: selectedRowIdsObj,
         hiddenColumns: hiddenColumns,
         groupBy: groupByColumns,

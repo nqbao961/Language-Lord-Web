@@ -24,7 +24,7 @@ export default function Play() {
   const user = useAppSelector(state => state.user);
 
   const onClickPlayLevel = () => {
-    dispatch(getLevel(user.level.en)).then(level => {
+    dispatch(getLevel(`${user.preferedLang}-${user.level.en}`)).then(level => {
       console.log(level);
       setCurrentLevel(level);
       setCountDown(3);

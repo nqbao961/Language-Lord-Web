@@ -3,6 +3,7 @@ export interface QuizData {
   id: string;
   content: string;
   answer: string;
+  type: string;
   button: JSX.Element;
 }
 
@@ -10,4 +11,5 @@ export interface AllQuizzesData {
   id: string;
   content: string;
   answer: string;
+  type: string;
 }

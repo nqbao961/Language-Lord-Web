@@ -43,15 +43,35 @@ export default function QuizzesModal({
         Header: t('Answer'),
         accessor: 'answer',
       },
+      {
+        Header: t('Type'),
+        accessor: 'type',
+      },
     ];
   }
 
   function createAllQuizzesData(allQuizzes: Quiz[]): AllQuizzesData[] {
-    return allQuizzes.map(quiz => ({
-      id: quiz._id,
-      content: quiz.content,
-      answer: quiz.answer,
-    }));
+    return allQuizzes.map(quiz => {
+      const typeString = () => {
+        switch (quiz.type) {
+          case 'shuffleLetters':
+            return t('Shuffle Letters');
+          case 'shuffleIdiom':
+            return t('Shuffle Idiom');
+          case 'multipleChoice':
+            return t('Multiple Choice');
+          default:
+            return '-';
+        }
+      };
+
+      return {
+        id: quiz._id,
+        content: quiz.content,
+        answer: quiz.answer,
+        type: typeString(),
+      };
+    });
   }
 
   const quizzesTableEl = useMemo(

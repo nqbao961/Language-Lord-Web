@@ -12,7 +12,7 @@ export interface User {
   role: 'admin' | 'user';
   avatar?: string;
   preferedLang: 'en' | 'vi';
-  level: { vi: string; en: string };
+  level: { vi: number; en: number };
   score: { vi: number; en: number };
   hint: { vi: number; en: number };
   completedQuizzes: { vi: Quiz['_id'][]; en: Quiz['_id'][] };

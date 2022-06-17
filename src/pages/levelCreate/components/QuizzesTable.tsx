@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Column, Row } from 'react-table';
 import { Table } from '../../../components';
+import { Quiz } from '../../../services/models';
 import styles from '../LevelCreate.module.scss';
 import { QuizData } from '../types';
 
@@ -40,6 +41,10 @@ export default function QuizzesTable({
         accessor: 'answer',
       },
       {
+        Header: t('Type'),
+        accessor: 'type',
+      },
+      {
         Header: '',
         accessor: 'button',
       },
@@ -50,23 +55,40 @@ export default function QuizzesTable({
     quizList: Row<object>[],
     setQuizList: React.Dispatch<React.SetStateAction<any[]>>
   ): QuizData[] {
-    return quizList.map((quiz, index, quizList) => ({
-      index: <span>{index + 1}</span>,
-      id: quiz.values._id,
-      content: quiz.values.content,
-      answer: quiz.values.answer,
-      button: (
-        <div
-          className={styles.buttonCell}
-          onClick={() => {
-            quiz.toggleRowSelected(false);
-            setQuizList(quizList.filter((item, i) => i !== index));
-          }}
-        >
-          <i className="fa-solid fa-trash-can"></i>
-        </div>
-      ),
-    }));
+    return quizList.map((quizRow, index, quizList) => {
+      const quiz = quizRow.values as Quiz;
+      const typeString = () => {
+        switch (quiz.type) {
+          case 'shuffleLetters':
+            return t('Shuffle Letters');
+          case 'shuffleIdiom':
+            return t('Shuffle Idiom');
+          case 'multipleChoice':
+            return t('Multiple Choice');
+          default:
+            return '-';
+        }
+      };
+
+      return {
+        index: <span>{index + 1}</span>,
+        id: quiz._id,
+        content: quiz.content,
+        answer: quiz.answer,
+        type: typeString(),
+        button: (
+          <div
+            className={styles.buttonCell}
+            onClick={() => {
+              quizRow.toggleRowSelected(false);
+              setQuizList(quizList.filter((item, i) => i !== index));
+            }}
+          >
+            <i className="fa-solid fa-trash-can"></i>
+          </div>
+        ),
+      };
+    });
   }
 
   return (

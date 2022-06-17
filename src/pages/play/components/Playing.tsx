@@ -29,15 +29,19 @@ export default function Playing({ level }: { level: Level }) {
     switch (currentQuiz.type) {
       case 'shuffleLetters':
         return t('Combine letters to make a correct word');
-
+      case 'shuffleIdiom':
+        return t('Combine words to make a correct phrase/idiom');
+      case 'multipleChoice':
+        return t('Choose a correct answer');
       default:
-        break;
+        return '';
     }
   }, [currentQuiz.type]);
 
   const splitedQuizContent = useMemo(() => {
     switch (currentQuiz.type) {
       case 'shuffleLetters':
+      case 'shuffleIdiom':
         return currentQuiz.content.split('/');
 
       default:
@@ -48,26 +52,36 @@ export default function Playing({ level }: { level: Level }) {
   const chosenChoices = useMemo(() => {
     switch (currentQuiz.type) {
       case 'shuffleLetters':
+      case 'shuffleIdiom':
         return splitedQuizContent.map((_, index) => (
           <div
             key={`chosen-${index}`}
-            className={styles.toChooseLetterCell}
+            className={
+              currentQuiz.type === 'shuffleLetters'
+                ? styles.toChooseLetterCell
+                : styles.toChooseWordCell
+            }
           ></div>
         ));
 
       default:
-        break;
+        return undefined;
     }
   }, [currentQuiz]);
 
   const choices = useMemo(() => {
     switch (currentQuiz.type) {
       case 'shuffleLetters':
+      case 'shuffleIdiom':
         return splitedQuizContent.map((letter, index) => (
           <div
             key={`letter-${index}`}
-            className={styles.letterCell}
-            onClick={e => onChooseLetter(letter, index, e)}
+            className={
+              currentQuiz.type === 'shuffleLetters'
+                ? styles.letterCell
+                : styles.wordCell
+            }
+            onClick={() => onChooseLetter(index)}
             style={cellStyles[index]}
           >
             {letter}
@@ -75,23 +89,26 @@ export default function Playing({ level }: { level: Level }) {
         ));
 
       default:
-        break;
+        return undefined;
     }
   }, [currentQuiz, cellStyles]);
 
-  const mergedAnswer = useMemo(
-    () =>
-      indexPositions
-        .map(i => (i !== undefined ? splitedQuizContent[i] : ''))
-        .join(''),
-    [currentQuiz, indexPositions, splitedQuizContent]
-  );
+  const mergedAnswer = useMemo(() => {
+    const stringArr = indexPositions.map(i =>
+      i !== undefined ? splitedQuizContent[i] : ''
+    );
+    switch (currentQuiz.type) {
+      case 'shuffleLetters':
+        return stringArr.join('');
+      case 'shuffleIdiom':
+        return stringArr.join(' ');
 
-  function onChooseLetter(
-    letter: string,
-    index: number,
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) {
+      default:
+        return '';
+    }
+  }, [currentQuiz, indexPositions, splitedQuizContent]);
+
+  function onChooseLetter(index: number) {
     const chosenIndex = indexPositions.findIndex(i => i === index);
 
     if (chosenIndex === -1) {
@@ -155,6 +172,7 @@ export default function Playing({ level }: { level: Level }) {
   function initCellStyles(quiz: Quiz) {
     switch (quiz.type) {
       case 'shuffleLetters':
+      case 'shuffleIdiom':
         return quiz.content.split('/').map(() => ({}));
 
       default:
@@ -165,6 +183,7 @@ export default function Playing({ level }: { level: Level }) {
   function initIndexPositions(quiz: Quiz) {
     switch (quiz.type) {
       case 'shuffleLetters':
+      case 'shuffleIdiom':
         return quiz.content.split('/').map(() => undefined);
 
       default:
@@ -172,47 +191,52 @@ export default function Playing({ level }: { level: Level }) {
     }
   }
 
-  function nextQuiz() {
+  function gotoNextQuiz() {
     if (currentQuizIndex < level.quizList.length - 1) {
+      const nextQuiz = level.quizList[currentQuizIndex + 1];
       setCurrentQuizIndex(currentQuizIndex + 1);
       setCurrentQuiz(level.quizList[currentQuizIndex + 1]);
-      setIndexPositions(
-        initIndexPositions(level.quizList[currentQuizIndex + 1])
-      );
-      setCellStyles([{}, {}, {}, {}, {}]);
+      setIndexPositions(initIndexPositions(nextQuiz));
+      setCellStyles(initCellStyles(nextQuiz));
     }
   }
 
   // Make position absolute
   useEffect(() => {
-    const newCellStyles: any[] = [];
-    Array.from(
-      document.getElementsByClassName(styles.choices)[0].children!
-    ).forEach(cell => {
-      newCellStyles.push({
-        position: 'absolute',
-        top: (cell as HTMLDivElement).offsetTop,
-        left: (cell as HTMLDivElement).offsetLeft,
+    if (
+      currentQuiz.type === 'shuffleLetters' ||
+      currentQuiz.type === 'shuffleIdiom'
+    ) {
+      const newCellStyles: any[] = [];
+      Array.from(
+        document.getElementsByClassName(styles.choices)[0].children!
+      ).forEach(cell => {
+        newCellStyles.push({
+          position: 'absolute',
+          top: (cell as HTMLDivElement).offsetTop,
+          left: (cell as HTMLDivElement).offsetLeft,
+        });
       });
-    });
-    setCellStyles(newCellStyles);
+      setCellStyles(newCellStyles);
 
-    const newCellPositions: any[] = [];
-    Array.from(
-      document.getElementsByClassName(styles.chosenChoices)[0].children!
-    ).forEach(cell => {
-      newCellPositions.push({
-        top: (cell as HTMLDivElement).offsetTop,
-        left: (cell as HTMLDivElement).offsetLeft,
+      const newCellPositions: any[] = [];
+      Array.from(
+        document.getElementsByClassName(styles.chosenChoices)[0].children!
+      ).forEach(cell => {
+        newCellPositions.push({
+          top: (cell as HTMLDivElement).offsetTop,
+          left: (cell as HTMLDivElement).offsetLeft,
+        });
       });
-    });
-    setChosenCellPositions(newCellPositions);
+      setChosenCellPositions(newCellPositions);
+    }
   }, [currentQuiz]);
 
   // Check answer
   useEffect(() => {
     switch (currentQuiz.type) {
       case 'shuffleLetters':
+      case 'shuffleIdiom':
         if (currentQuiz.answer === mergedAnswer) {
           trueModalRef.current?.showModal();
         } else {
@@ -243,16 +267,23 @@ export default function Playing({ level }: { level: Level }) {
 
       <div className={styles.quizContent}>{currentQuiz.content}</div>
 
-      <div className={styles.belowWrapper}>
-        <div className={styles.chosenChoices}>{chosenChoices}</div>
+      {(currentQuiz.type === 'shuffleLetters' ||
+        currentQuiz.type === 'shuffleIdiom') && (
+        <div className={styles.belowWrapper}>
+          <div className={styles.chosenChoices}>{chosenChoices}</div>
 
-        <div className={styles.mergedAnswer}>{mergedAnswer}</div>
+          <div className={styles.mergedAnswer}>{mergedAnswer}</div>
 
-        <div className={styles.choices}>{choices}</div>
-
-        <div className={styles.actions}>
-          <img src={bulb} alt="bulb-icon" />
+          <div className={styles.choices}>{choices}</div>
         </div>
+      )}
+
+      {currentQuiz.type === 'multipleChoice' && (
+        <div className={styles.multipleChoiceContainer}></div>
+      )}
+
+      <div className={styles.actions}>
+        <img src={bulb} alt="bulb-icon" />
       </div>
 
       <Modal
@@ -265,7 +296,7 @@ export default function Playing({ level }: { level: Level }) {
             {currentQuiz.info && <div>{currentQuiz.info}</div>}
           </div>
         }
-        handleOkay={nextQuiz}
+        handleOkay={gotoNextQuiz}
       />
     </div>
   );
