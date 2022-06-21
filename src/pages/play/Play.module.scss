@@ -124,8 +124,13 @@
 
   img {
     width: 36px;
+    animation-name: shake;
+    animation-duration: 0.15s;
+    animation-iteration-count: infinite;
   }
 }
+
+@include animation-shake;
 
 .countDown {
   display: flex;
@@ -218,9 +223,46 @@
 .actions {
   display: flex;
   justify-content: center;
-  margin-top: 6px;
+  margin-top: 10px;
 
   img {
     width: 40px;
   }
+}
+
+.multipleChoiceContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+}
+
+.multipleChoiceWrapper {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.choiceItem {
+  padding: 8px;
+}
+
+// True modal
+.bodyModal {
+  padding: 8px;
+  border-radius: 8px;
+  background-color: var(--tertiary-container);
+  color: var(--on-tertiary-container);
+}
+
+.answerText {
+  color: var(--primary);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.infoText {
+  font-style: italic;
+  text-align: right;
 }

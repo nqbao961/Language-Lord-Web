@@ -6,7 +6,7 @@ import bulb from '../../../assets/images/light-bulb.png';
 import styles from '../Play.module.scss';
 import { keyframes } from 'styled-components';
 import { useModalRef } from '../../../services/hooks';
-import { Modal } from '../../../components';
+import { Button, Modal } from '../../../components';
 
 export default function Playing({ level }: { level: Level }) {
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
@@ -86,6 +86,16 @@ export default function Playing({ level }: { level: Level }) {
           >
             {letter}
           </div>
+        ));
+
+      case 'multipleChoice':
+        return currentQuiz.choices.map((choice, index) => (
+          <Button
+            key={`choice-${index}`}
+            label={choice}
+            className={styles.choiceItem}
+            handleClick={() => onChooseChoice(choice)}
+          />
         ));
 
       default:
@@ -169,6 +179,12 @@ export default function Playing({ level }: { level: Level }) {
     }
   }
 
+  function onChooseChoice(chosenChoice: string) {
+    if (chosenChoice.toLowerCase() === currentQuiz.answer.toLowerCase()) {
+      trueModalRef.current?.showModal();
+    }
+  }
+
   function initCellStyles(quiz: Quiz) {
     switch (quiz.type) {
       case 'shuffleLetters':
@@ -195,9 +211,20 @@ export default function Playing({ level }: { level: Level }) {
     if (currentQuizIndex < level.quizList.length - 1) {
       const nextQuiz = level.quizList[currentQuizIndex + 1];
       setCurrentQuizIndex(currentQuizIndex + 1);
-      setCurrentQuiz(level.quizList[currentQuizIndex + 1]);
-      setIndexPositions(initIndexPositions(nextQuiz));
-      setCellStyles(initCellStyles(nextQuiz));
+      setCurrentQuiz(nextQuiz);
+
+      switch (nextQuiz.type) {
+        case 'shuffleLetters':
+        case 'shuffleIdiom':
+          setIndexPositions(initIndexPositions(nextQuiz));
+          setCellStyles(initCellStyles(nextQuiz));
+          break;
+
+        case 'multipleChoice':
+
+        default:
+          break;
+      }
     }
   }
 
@@ -237,7 +264,7 @@ export default function Playing({ level }: { level: Level }) {
     switch (currentQuiz.type) {
       case 'shuffleLetters':
       case 'shuffleIdiom':
-        if (currentQuiz.answer === mergedAnswer) {
+        if (currentQuiz.answer.toLowerCase() === mergedAnswer.toLowerCase()) {
           trueModalRef.current?.showModal();
         } else {
         }
@@ -258,7 +285,11 @@ export default function Playing({ level }: { level: Level }) {
           }`}</p>
         </div>
         <div className={styles.time}>
-          <img src={clock} alt="clock-icon" />
+          <img
+            src={clock}
+            alt="clock-icon"
+            style={{ animationName: 'unset' }}
+          />
           <div className={styles.countDown}>{countDown}</div>
         </div>
       </div>
@@ -279,7 +310,9 @@ export default function Playing({ level }: { level: Level }) {
       )}
 
       {currentQuiz.type === 'multipleChoice' && (
-        <div className={styles.multipleChoiceContainer}></div>
+        <div className={styles.multipleChoiceContainer}>
+          <div className={styles.multipleChoiceWrapper}>{choices}</div>
+        </div>
       )}
 
       <div className={styles.actions}>
@@ -290,13 +323,16 @@ export default function Playing({ level }: { level: Level }) {
         ref={trueModalRef}
         header={t('Excellent') + '!!!'}
         body={
-          <div className={styles.trueModal}>
-            <div>{currentQuiz.answer}</div>
+          <div className={styles.bodyModal}>
+            <div className={styles.answerText}>{currentQuiz.answer}</div>
             {currentQuiz.explaination && <div>{currentQuiz.explaination}</div>}
-            {currentQuiz.info && <div>{currentQuiz.info}</div>}
+            {currentQuiz.info && (
+              <div className={styles.infoText}>{currentQuiz.info}</div>
+            )}
           </div>
         }
         handleOkay={gotoNextQuiz}
+        showClose={false}
       />
     </div>
   );
