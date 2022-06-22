@@ -1,10 +1,17 @@
 import axios from 'axios';
 import { store } from '../@redux/store';
+import { selectEnv } from '../env';
+
+export const baseURL = selectEnv({
+  dev: 'http://localhost:5000',
+  staging: 'https://language-lord-api.herokuapp.com/',
+  prod: 'https://language-lord-api.herokuapp.com/',
+});
 
 const token = localStorage.getItem('token');
 
 export const instance = axios.create({
-  baseURL: 'http://localhost:5000/',
+  baseURL,
   headers: {
     'Cache-Control': 'no-cache',
     Pragma: 'no-cache',
