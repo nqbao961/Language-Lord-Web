@@ -7,6 +7,7 @@ import styles from '../Play.module.scss';
 import { keyframes } from 'styled-components';
 import { useModalRef } from '../../../services/hooks';
 import { Button, Modal } from '../../../components';
+import { correctStrings } from '../../../services/helpers';
 
 export default function Playing({ level }: { level: Level }) {
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
@@ -344,7 +345,7 @@ export default function Playing({ level }: { level: Level }) {
 
       <Modal
         ref={trueModalRef}
-        header={t('Excellent') + '!!!'}
+        header={correctStrings[0]}
         body={
           <div className={styles.bodyModal}>
             <div className={styles.answerText}>{currentQuiz.answer}</div>

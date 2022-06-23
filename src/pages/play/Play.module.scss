@@ -1,3 +1,6 @@
+@include animation-shake;
+@include animation-zoom-in-out;
+
 .container {
   background: radial-gradient(50% 50% at 50% 50%, #a659fe 0%, #6f53fd 100%);
   height: 100vh;
@@ -75,12 +78,6 @@
   flex: 1;
 }
 
-.playLevelButton {
-  display: block;
-  margin: 0 auto;
-  margin-top: 50%;
-}
-
 .ready {
   background-color: var(--background);
   height: calc(100% - 24px * 2);
@@ -90,6 +87,22 @@
   align-items: center;
   justify-content: center;
   font-size: 60px;
+}
+
+// Home
+.selectLevelContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+
+  img {
+    width: 90%;
+    animation-name: zoom-in-out;
+    animation-duration: 1.8s;
+    animation-iteration-count: infinite;
+  }
 }
 
 // Playing
@@ -129,8 +142,6 @@
     animation-iteration-count: infinite;
   }
 }
-
-@include animation-shake;
 
 .countDown {
   display: flex;
