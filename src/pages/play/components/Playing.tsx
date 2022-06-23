@@ -20,7 +20,9 @@ export default function Playing({ level }: { level: Level }) {
   const [indexPositions, setIndexPositions] = useState<(number | undefined)[]>(
     initIndexPositions(currentQuiz)
   );
-  const [countDown, setCountDown] = useState(60);
+  const [countDown, setCountDown] = useState(50);
+  const [intervalId, setIntervalId] = useState<any>(0);
+  const [isPausing, setIsPausing] = useState(false);
 
   const { t, i18n } = useTranslation();
   const trueModalRef = useModalRef();
@@ -182,6 +184,7 @@ export default function Playing({ level }: { level: Level }) {
   function onChooseChoice(chosenChoice: string) {
     if (chosenChoice.toLowerCase() === currentQuiz.answer.toLowerCase()) {
       trueModalRef.current?.showModal();
+      setIsPausing(true);
     }
   }
 
@@ -208,6 +211,7 @@ export default function Playing({ level }: { level: Level }) {
   }
 
   function gotoNextQuiz() {
+    setIsPausing(false);
     if (currentQuizIndex < level.quizList.length - 1) {
       const nextQuiz = level.quizList[currentQuizIndex + 1];
       setCurrentQuizIndex(currentQuizIndex + 1);
@@ -227,6 +231,22 @@ export default function Playing({ level }: { level: Level }) {
       }
     }
   }
+
+  // Time count down
+  useEffect(() => {
+    if (!isPausing) {
+      const timer = setInterval(() => {
+        setCountDown(countDown => countDown - 1);
+      }, 1000);
+      setIntervalId(timer);
+    } else {
+      clearInterval(intervalId);
+    }
+  }, [isPausing]);
+
+  useEffect(() => {
+    countDown <= 0 && clearInterval(intervalId);
+  }, [countDown]);
 
   // Make position absolute
   useEffect(() => {
@@ -266,6 +286,7 @@ export default function Playing({ level }: { level: Level }) {
       case 'shuffleIdiom':
         if (currentQuiz.answer.toLowerCase() === mergedAnswer.toLowerCase()) {
           trueModalRef.current?.showModal();
+          setIsPausing(true);
         } else {
         }
         break;
@@ -288,7 +309,9 @@ export default function Playing({ level }: { level: Level }) {
           <img
             src={clock}
             alt="clock-icon"
-            style={{ animationName: 'unset' }}
+            style={
+              countDown <= 0 || isPausing ? { animationName: 'unset' } : {}
+            }
           />
           <div className={styles.countDown}>{countDown}</div>
         </div>

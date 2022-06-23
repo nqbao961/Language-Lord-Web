@@ -6,7 +6,7 @@ Let's play [Language Lord!](https://language-lord-web.vercel.app/).
 
 I want to actualize an idea into a real project, apply which I have accumulated in Front-end experience.
 
-Front-end is so intersting!
+Front-end is so interesting!
 
 This game is built using ReactJS (FE) and ExpressJS (BE).
 
