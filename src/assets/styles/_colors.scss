@@ -25,6 +25,8 @@ $surface-variant-light: #e7e0ec;
 $on-surface-variant-light: #49454f;
 $inverse-surface-light: #313033;
 $inverse-on-surface-light: #f4eff4;
+$primary-header-light: #4cdafe;
+$on-primary-header-light: #ffffff;
 // dark
 $primary-dark: #b4c4ff;
 $on-primary-dark: #002781;
@@ -53,6 +55,8 @@ $surface-variant-dark: #49454f;
 $on-surface-variant-dark: #cac4d0;
 $inverse-surface-dark: #e6e1e5;
 $inverse-on-surface-dark: #1c1b1f;
+$primary-header-dark: #4cdafe;
+$on-primary-header-dark: #ffffff;
 
 $transparent: #ffffff00;
 $transparent-black: rgba(0, 0, 0, 0.3);
@@ -87,6 +91,8 @@ $transparent-black: rgba(0, 0, 0, 0.3);
   --inverse-on-surface: #{$inverse-on-surface-light};
   --transparent: #{$transparent};
   --transparent-black: #{$transparent-black};
+  --primary-header: #{$primary-header-light};
+  --on-primary-header: #{$on-primary-header-light};
 }
 .dark {
   --primary: #{$primary-dark};
@@ -118,4 +124,6 @@ $transparent-black: rgba(0, 0, 0, 0.3);
   --inverse-on-surface: #{$inverse-on-surface-dark};
   --transparent: #{$transparent};
   --transparent-black: #{$transparent-black};
+  --primary-header: #{$primary-header-dark};
+  --on-primary-header: #{$on-primary-header-dark};
 }

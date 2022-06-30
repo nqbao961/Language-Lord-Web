@@ -2,14 +2,23 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Level, Quiz } from '../../../services/models';
 import clock from '../../../assets/images/alarm-clock.png';
+import brain from '../../../assets/images/brain.png';
 import bulb from '../../../assets/images/light-bulb.png';
+import wrong from '../../../assets/images/wrong.png';
 import styles from '../Play.module.scss';
 import { keyframes } from 'styled-components';
 import { useModalRef } from '../../../services/hooks';
 import { Button, Modal } from '../../../components';
 import { correctStrings } from '../../../services/helpers';
+import { PlayState } from '../type';
+import { CSSTransition } from 'react-transition-group';
 
-export default function Playing({ level }: { level: Level }) {
+type PlayingProps = {
+  level: Level;
+  setPlayState: React.Dispatch<React.SetStateAction<PlayState>>;
+};
+
+export default function Playing({ level, setPlayState }: PlayingProps) {
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
   const [currentQuiz, setCurrentQuiz] = useState(level.quizList[0]);
   const [chosenCellPositions, setChosenCellPositions] = useState<
@@ -24,6 +33,7 @@ export default function Playing({ level }: { level: Level }) {
   const [countDown, setCountDown] = useState(50);
   const [intervalId, setIntervalId] = useState<any>(0);
   const [isPausing, setIsPausing] = useState(false);
+  const [showWrong, setShowWrong] = useState(false);
 
   const { t, i18n } = useTranslation();
   const trueModalRef = useModalRef();
@@ -230,6 +240,8 @@ export default function Playing({ level }: { level: Level }) {
         default:
           break;
       }
+    } else {
+      setPlayState('result');
     }
   }
 
@@ -288,7 +300,11 @@ export default function Playing({ level }: { level: Level }) {
         if (currentQuiz.answer.toLowerCase() === mergedAnswer.toLowerCase()) {
           trueModalRef.current?.showModal();
           setIsPausing(true);
-        } else {
+        } else if (currentQuiz.answer.length === mergedAnswer.length) {
+          setShowWrong(true);
+          setTimeout(() => {
+            setShowWrong(false);
+          }, 1000);
         }
         break;
 
@@ -345,19 +361,42 @@ export default function Playing({ level }: { level: Level }) {
 
       <Modal
         ref={trueModalRef}
-        header={correctStrings[0]}
+        header={<div className={styles.headerModal}>{correctStrings[0]}</div>}
         body={
-          <div className={styles.bodyModal}>
-            <div className={styles.answerText}>{currentQuiz.answer}</div>
-            {currentQuiz.explaination && <div>{currentQuiz.explaination}</div>}
-            {currentQuiz.info && (
-              <div className={styles.infoText}>{currentQuiz.info}</div>
-            )}
-          </div>
+          <>
+            <div className={styles.bodyModal}>
+              <div className={styles.answerText}>{currentQuiz.answer}</div>
+              {currentQuiz.explaination && (
+                <div>{currentQuiz.explaination}</div>
+              )}
+              {currentQuiz.info && (
+                <div className={styles.infoText}>{currentQuiz.info}</div>
+              )}
+            </div>
+            <div className={styles.gainedScore}>
+              <img src={brain} alt="brain-icon" />
+              +10
+            </div>
+          </>
         }
         handleOkay={gotoNextQuiz}
-        showClose={false}
+        showClose={true}
       />
+      <button onClick={() => trueModalRef.current?.showModal()}></button>
+
+      <CSSTransition
+        in={showWrong}
+        timeout={300}
+        unmountOnExit
+        classNames={{
+          enter: styles.wrongEnter,
+          enterActive: styles.wrongEnterActive,
+          exit: styles.wrongExit,
+          exitActive: styles.wrongExitActive,
+        }}
+      >
+        <img className={styles.wrongAnswer} src={wrong} alt="wrong" />
+      </CSSTransition>
     </div>
   );
 }

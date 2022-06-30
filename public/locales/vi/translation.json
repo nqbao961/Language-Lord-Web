@@ -9,6 +9,7 @@
   "Choose type": "Chọn loại câu hỏi",
   "Combine letters to make a correct word": "Kết hợp các ký tự để tạo thành từ đúng",
   "Combine words to make a correct phrase/idiom": "Kết hợp các từ để tạo thành câu đúng",
+  "Complete": "Hoàn thành",
   "Content": "Nội dung",
   "Create Level": "Tạo Cấp Độ",
   "Create Quiz": "Tạo Câu Đố",
@@ -39,5 +40,8 @@
   "Success": "Đúng rồi",
   "table out of pages": "{{current}} trên tổng {{total}} trang",
   "Type": "Loại câu hỏi",
-  "Users": "Người chơi"
+  "Users": "Người chơi",
+  "Score": "Score",
+  "Time left": "Time left",
+  "Reward": "Reward"
 }

@@ -9,6 +9,7 @@
   "Choose type": "Choose type",
   "Combine letters to make a correct word": "Combine letters to make a correct word",
   "Combine words to make a correct phrase/idiom": "Combine words to make a correct phrase/idiom",
+  "Complete": "Complete",
   "Content": "Content",
   "Create Level": "Create Level",
   "Create Quiz": "Create Quiz",
@@ -39,5 +40,8 @@
   "Success": "Success",
   "table out of pages": "{{current}} out of {{total}} pages",
   "Type": "Type",
-  "Users": "Users"
+  "Users": "Users",
+  "Score": "Score",
+  "Time left": "Time left",
+  "Reward": "Reward"
 }

@@ -14,6 +14,6 @@ export default function Ready({
   }, [countDown]);
 
   return (
-    <div className={styles.ready}>{countDown === 0 ? 'Ready!' : countDown}</div>
+    <div className={styles.ready}>{countDown <= 0 ? 'Ready!' : countDown}</div>
   );
 }

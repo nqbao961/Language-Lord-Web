@@ -20,6 +20,33 @@
   gap: 20px;
 }
 
+.wrongAnswer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+}
+
+.wrongEnter {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.1);
+}
+.wrongEnterActive {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  transition: opacity 300ms, transform 300ms;
+}
+.wrongExit {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.wrongExitActive {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.1);
+  transition: opacity 300ms, transform 300ms;
+}
+
 // Profile
 .profileButton {
   display: inline-flex;
@@ -259,12 +286,31 @@
   padding: 8px;
 }
 
-// True modal
+// Correct modal
+.headerModal {
+  background-color: var(--primary-header);
+  color: var(--on-primary-header);
+  text-align: center;
+  padding: 4px 8px;
+  border-radius: 16px;
+}
+
 .bodyModal {
   padding: 8px;
   border-radius: 8px;
   background-color: var(--tertiary-container);
   color: var(--on-tertiary-container);
+  margin-bottom: 12px;
+}
+
+.gainedScore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  img {
+    width: 24px;
+  }
 }
 
 .answerText {
@@ -276,4 +322,89 @@
 .infoText {
   font-style: italic;
   text-align: right;
+}
+
+// Result
+.resultContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.result {
+  background-color: var(--background);
+  height: 340px;
+  width: 260px;
+  border-radius: 20px;
+  position: relative;
+  box-shadow: 0px 6px 0px 0px rgba(0, 0, 0, 0.4),
+    0px -6px 0px 0px rgba(0, 0, 0, 0.3) inset;
+
+  .ribbonImg {
+    position: absolute;
+    top: -40%;
+    left: 50%;
+    transform: translateX(-49%);
+    width: 350px;
+  }
+
+  .ribbonText {
+    position: absolute;
+    top: -10%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+
+    div:first-child {
+      color: #b20d78;
+      padding-bottom: 8px;
+    }
+    div:last-child {
+      color: #fff;
+      font-size: 28px;
+      text-shadow: 4px 4px #b20d78;
+    }
+  }
+}
+
+.ribbonContent {
+  padding: 50px 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.ribbonContentRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.ribbonContentTitle {
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.ribbonContentGroup {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+
+  img {
+    width: 28px;
+  }
+}
+
+.ribbonActions {
+  display: flex;
+  justify-content: space-around;
+
+  img {
+    width: 36px;
+  }
 }

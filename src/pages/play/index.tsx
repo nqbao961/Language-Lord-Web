@@ -13,6 +13,7 @@ import { getLevel } from '../../services/@redux/actions';
 import Playing from './components/Playing';
 import { Level } from '../../services/models';
 import logo from '../../assets/images/logo-lang.png';
+import Result from './components/Result';
 
 export default function Play() {
   const [playState, setPlayState] = useState<PlayState>('selectLevel');
@@ -69,8 +70,9 @@ export default function Play() {
           <Ready countDown={countDown} setPlayState={setPlayState} />
         )}
         {playState === 'playing' && currentLevel && (
-          <Playing level={currentLevel} />
+          <Playing level={currentLevel} setPlayState={setPlayState} />
         )}
+        {playState === 'result' && <Result setPlayState={setPlayState} />}
       </div>
     </div>
   );
