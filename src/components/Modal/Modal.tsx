@@ -9,6 +9,7 @@ import {
 } from 'react';
 import SimpleBar from 'simplebar-react';
 import { createPortal } from 'react-dom';
+import { CSSTransition } from 'react-transition-group';
 import { Button } from '../Button';
 
 export type ModalImperativeType = {
@@ -67,43 +68,55 @@ function Modal(
 
   const modalEl = (
     <div ref={containerRef} className={styles.container}>
-      <div
-        ref={wrapperRef}
-        className={styles.wrapper}
-        style={{ width: width || undefined }}
-        tabIndex={0}
+      <CSSTransition
+        in={show}
+        timeout={300}
+        unmountOnExit={!keepAlive}
+        classNames={{
+          enter: styles.modalEnter,
+          enterActive: styles.modalEnterActive,
+          exit: styles.modalExit,
+          exitActive: styles.modalExitActive,
+        }}
       >
-        {showClose && (
-          <i
-            className={`fa-solid fa-xmark-large ${styles.closeIcon}`}
-            onClick={() => handleHideModal()}
-          ></i>
-        )}
-        {header && <h3 className={styles.header}>{header}</h3>}
-        {body && (
-          <div className={styles.body}>
-            {bodyMaxHeight ? (
-              <SimpleBar style={{ maxHeight: bodyMaxHeight, width: 'auto' }}>
-                {body}
-              </SimpleBar>
-            ) : (
-              body
-            )}
-          </div>
-        )}
-        {showCloseButton && (
-          <div className={styles.footer}>
-            <Button
-              label="Okay"
-              handleClick={() => {
-                handleOkay && handleOkay();
-                handleHideModal();
-              }}
-            />
-          </div>
-        )}
-        {footer && <div className={styles.footer}>{footer}</div>}
-      </div>
+        <div
+          ref={wrapperRef}
+          className={styles.wrapper}
+          style={{ width: width || undefined }}
+          tabIndex={0}
+        >
+          {showClose && (
+            <i
+              className={`fa-solid fa-xmark-large ${styles.closeIcon}`}
+              onClick={() => handleHideModal()}
+            ></i>
+          )}
+          {header && <h3 className={styles.header}>{header}</h3>}
+          {body && (
+            <div className={styles.body}>
+              {bodyMaxHeight ? (
+                <SimpleBar style={{ maxHeight: bodyMaxHeight, width: 'auto' }}>
+                  {body}
+                </SimpleBar>
+              ) : (
+                body
+              )}
+            </div>
+          )}
+          {showCloseButton && (
+            <div className={styles.footer}>
+              <Button
+                label="Okay"
+                handleClick={() => {
+                  handleOkay && handleOkay();
+                  handleHideModal();
+                }}
+              />
+            </div>
+          )}
+          {footer && <div className={styles.footer}>{footer}</div>}
+        </div>
+      </CSSTransition>
     </div>
   );
 
@@ -115,19 +128,16 @@ function Modal(
     if (show) {
       wrapperRef!?.current!?.focus();
       document.addEventListener('keydown', handlePressEsc);
+      containerRef.current!.style.display = 'flex';
 
       if (document.body.scrollHeight > window.innerHeight) {
         document.body.classList.add('modal-show');
       }
-
-      if (keepAlive) {
-        containerRef.current!.style.display = 'flex';
-      }
     } else {
       document.body.classList.remove('modal-show');
-      if (keepAlive) {
+      setTimeout(() => {
         containerRef.current!.style.display = 'none';
-      }
+      }, 300);
     }
 
     return () => {
@@ -135,15 +145,7 @@ function Modal(
     };
   }, [show]);
 
-  return (
-    <>
-      {keepAlive
-        ? createPortal(modalEl, modalRootEl!)
-        : show
-        ? createPortal(modalEl, modalRootEl!)
-        : null}
-    </>
-  );
+  return createPortal(modalEl, modalRootEl!);
 }
 
 export default forwardRef(Modal);

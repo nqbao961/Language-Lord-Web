@@ -382,7 +382,6 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
         handleOkay={gotoNextQuiz}
         showClose={true}
       />
-      <button onClick={() => trueModalRef.current?.showModal()}></button>
 
       <CSSTransition
         in={showWrong}
