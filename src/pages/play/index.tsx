@@ -14,6 +14,7 @@ import Playing from './components/Playing';
 import { Level } from '../../services/models';
 import logo from '../../assets/images/logo-lang.png';
 import Result from './components/Result';
+import { SwitchTransition, CSSTransition } from 'react-transition-group';
 
 export default function Play() {
   const [playState, setPlayState] = useState<PlayState>('selectLevel');
@@ -55,25 +56,40 @@ export default function Play() {
         </div>
       </div>
 
-      <div className={styles.mainContent}>
-        {playState === 'selectLevel' && (
-          <div className={styles.selectLevelContainer}>
-            <img src={logo} alt="logo" />
-            <Button
-              className={styles.playLevelButton}
-              label={`${t('Level')} ${user.level.en}`}
-              handleClick={onClickPlayLevel}
-            />
+      <SwitchTransition>
+        <CSSTransition
+          key={playState}
+          addEndListener={(node, done) => {
+            node.addEventListener('transitionend', done, false);
+          }}
+          classNames={{
+            enter: styles.playEnter,
+            enterActive: styles.playEnterActive,
+            exit: styles.playExit,
+            exitActive: styles.playExitActive,
+          }}
+        >
+          <div className={styles.mainContent}>
+            {playState === 'selectLevel' && (
+              <div className={styles.selectLevelContainer}>
+                <img src={logo} alt="logo" />
+                <Button
+                  className={styles.playLevelButton}
+                  label={`${t('Level')} ${user.level.en}`}
+                  handleClick={onClickPlayLevel}
+                />
+              </div>
+            )}
+            {playState === 'ready' && (
+              <Ready countDown={countDown} setPlayState={setPlayState} />
+            )}
+            {playState === 'playing' && currentLevel && (
+              <Playing level={currentLevel} setPlayState={setPlayState} />
+            )}
+            {playState === 'result' && <Result setPlayState={setPlayState} />}
           </div>
-        )}
-        {playState === 'ready' && (
-          <Ready countDown={countDown} setPlayState={setPlayState} />
-        )}
-        {playState === 'playing' && currentLevel && (
-          <Playing level={currentLevel} setPlayState={setPlayState} />
-        )}
-        {playState === 'result' && <Result setPlayState={setPlayState} />}
-      </div>
+        </CSSTransition>
+      </SwitchTransition>
     </div>
   );
 }

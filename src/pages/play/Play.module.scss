@@ -20,6 +20,30 @@
   gap: 20px;
 }
 
+// Play state animate
+.playEnter {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.playExit {
+  opacity: 1;
+  transform: translateX(0%);
+}
+
+.playEnterActive {
+  opacity: 1;
+  transform: translateX(0%);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.playExitActive {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 300ms, transform 300ms;
+}
+
+// Wrong animate
 .wrongAnswer {
   position: absolute;
   top: 50%;
@@ -32,15 +56,18 @@
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.1);
 }
+
 .wrongEnterActive {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
   transition: opacity 300ms, transform 300ms;
 }
+
 .wrongExit {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
 }
+
 .wrongExitActive {
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.1);
@@ -407,4 +434,15 @@
   img {
     width: 36px;
   }
+}
+
+.resultEnter {
+  opacity: 0;
+  transform: scale(0.1);
+}
+
+.resultEnterActive {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 300ms, transform 300ms;
 }

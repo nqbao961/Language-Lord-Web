@@ -1,4 +1,8 @@
-import i18next from 'i18next';
+import i18next from '../../i18n';
+
+export function getRandomInt(max: number) {
+  return Math.floor(Math.random() * max);
+}
 
 export const correctStrings = [
   i18next.t('Excellent')?.toUpperCase() + '!!!',

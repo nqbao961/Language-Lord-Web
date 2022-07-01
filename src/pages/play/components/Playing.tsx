@@ -9,7 +9,7 @@ import styles from '../Play.module.scss';
 import { keyframes } from 'styled-components';
 import { useModalRef } from '../../../services/hooks';
 import { Button, Modal } from '../../../components';
-import { correctStrings } from '../../../services/helpers';
+import { correctStrings, getRandomInt } from '../../../services/helpers';
 import { PlayState } from '../type';
 import { CSSTransition } from 'react-transition-group';
 
@@ -19,7 +19,7 @@ type PlayingProps = {
 };
 
 export default function Playing({ level, setPlayState }: PlayingProps) {
-  const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
+  const [currentQuizIndex, setCurrentQuizIndex] = useState(9);
   const [currentQuiz, setCurrentQuiz] = useState(level.quizList[0]);
   const [chosenCellPositions, setChosenCellPositions] = useState<
     { top: number; left: number }[]
@@ -34,6 +34,9 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   const [intervalId, setIntervalId] = useState<any>(0);
   const [isPausing, setIsPausing] = useState(false);
   const [showWrong, setShowWrong] = useState(false);
+  const [correctTitle, setCorrectTitle] = useState(
+    correctStrings[getRandomInt(5)]
+  );
 
   const { t, i18n } = useTranslation();
   const trueModalRef = useModalRef();
@@ -222,8 +225,12 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   }
 
   function gotoNextQuiz() {
-    setIsPausing(false);
+    setTimeout(() => {
+      setCorrectTitle(correctStrings[getRandomInt(5)]);
+    }, 300);
+
     if (currentQuizIndex < level.quizList.length - 1) {
+      setIsPausing(false);
       const nextQuiz = level.quizList[currentQuizIndex + 1];
       setCurrentQuizIndex(currentQuizIndex + 1);
       setCurrentQuiz(nextQuiz);
@@ -255,10 +262,14 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
     } else {
       clearInterval(intervalId);
     }
+
+    return () => clearInterval(intervalId);
   }, [isPausing]);
 
   useEffect(() => {
     countDown <= 0 && clearInterval(intervalId);
+
+    return () => clearInterval(intervalId);
   }, [countDown]);
 
   // Make position absolute
@@ -361,7 +372,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
 
       <Modal
         ref={trueModalRef}
-        header={<div className={styles.headerModal}>{correctStrings[0]}</div>}
+        header={<div className={styles.headerModal}>{correctTitle}</div>}
         body={
           <>
             <div className={styles.bodyModal}>
