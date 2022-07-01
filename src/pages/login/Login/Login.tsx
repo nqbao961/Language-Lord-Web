@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Button } from '../../../components';
 import { Location } from '../../../services/models';
 
 export default function Login() {
@@ -21,7 +22,7 @@ export default function Login() {
   };
   return (
     <div>
-      <button onClick={login}>Login</button>
+      <Button label="Login" handleClick={login} />
     </div>
   );
 }

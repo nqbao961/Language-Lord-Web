@@ -19,7 +19,7 @@ type PlayingProps = {
 };
 
 export default function Playing({ level, setPlayState }: PlayingProps) {
-  const [currentQuizIndex, setCurrentQuizIndex] = useState(9);
+  const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
   const [currentQuiz, setCurrentQuiz] = useState(level.quizList[0]);
   const [chosenCellPositions, setChosenCellPositions] = useState<
     { top: number; left: number }[]
@@ -391,7 +391,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
           </>
         }
         handleOkay={gotoNextQuiz}
-        showClose={true}
+        showClose={false}
       />
 
       <CSSTransition
