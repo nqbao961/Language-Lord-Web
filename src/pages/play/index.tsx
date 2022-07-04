@@ -15,7 +15,10 @@ import { Level } from '../../services/models';
 import logo from '../../assets/images/logo-lang.png';
 import Result from './components/Result';
 import { SwitchTransition, CSSTransition } from 'react-transition-group';
-import { updatePlayingLevel } from '../../services/@redux/actions/app';
+import {
+  updatePlayingLevel,
+  getLevelTotal,
+} from '../../services/@redux/actions/app';
 
 export default function Play() {
   const [playState, setPlayState] = useState<PlayState>('selectLevel');
@@ -26,9 +29,12 @@ export default function Play() {
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.user);
+  const app = useAppSelector(state => state.app);
 
   const onClickPlayLevel = () => {
-    dispatch(getLevel(`${user.preferedLang}-${user.level.en}`)).then(level => {
+    dispatch(
+      getLevel(`${user.preferedLang}-${user.level[user.preferedLang]}`)
+    ).then(level => {
       dispatch(updatePlayingLevel(level.levelNumber));
       setCurrentLevel(level);
       setCountDown(3);
@@ -49,6 +55,10 @@ export default function Play() {
     }, 1000);
     setIntervalId(timer);
   }
+
+  useEffect(() => {
+    dispatch(getLevelTotal());
+  }, []);
 
   useEffect(() => {
     countDown === -1 && clearInterval(intervalId);
@@ -84,11 +94,16 @@ export default function Play() {
             {playState === 'selectLevel' && (
               <div className={styles.selectLevelContainer}>
                 <img src={logo} alt="logo" />
-                <Button
-                  className={styles.playLevelButton}
-                  label={`${t('Level')} ${user.level.en}`}
-                  handleClick={onClickPlayLevel}
-                />
+                {app.levelTotal[user.preferedLang] >=
+                user.level[user.preferedLang] ? (
+                  <Button
+                    className={styles.playLevelButton}
+                    label={`${t('Level')} ${user.level.en}`}
+                    handleClick={onClickPlayLevel}
+                  />
+                ) : (
+                  <div>{t('Well done! Stay tuned for upcoming levels!')}</div>
+                )}
               </div>
             )}
             {playState === 'ready' && (

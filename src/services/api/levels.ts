@@ -17,6 +17,12 @@ export const getLevel = (id: string): APIResponse<Level> =>
     method: 'GET',
   });
 
+export const getLevelTotal = (): APIResponse<{ en: number; vi: number }> =>
+  instance.request({
+    url: `/levels/total`,
+    method: 'GET',
+  });
+
 export const createLevel = (level: LevelCreate): APIResponse<Level> =>
   instance.request({
     url: '/levels',

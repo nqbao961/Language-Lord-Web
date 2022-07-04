@@ -6,6 +6,7 @@ import {
   UPDATE_GAINED_SCORE,
   UPDATE_PLAYING_LEVEL,
   UPDATE_REMAIN_TIME,
+  UPDATE_LEVEL_TOTAL,
 } from '../actionTypes';
 
 const defaultAppState: {
@@ -14,12 +15,14 @@ const defaultAppState: {
   gainedScore: number;
   gainedHint: number;
   playingLevel: number;
+  levelTotal: { en: number; vi: number };
 } = {
   loading: false,
   remainTime: 0,
   gainedScore: 0,
   gainedHint: 0,
   playingLevel: 0,
+  levelTotal: { en: 999, vi: 999 },
 };
 
 export default (app = defaultAppState, action: AnyAction) => {
@@ -53,6 +56,11 @@ export default (app = defaultAppState, action: AnyAction) => {
       return {
         ...app,
         playingLevel: action.payload as number,
+      };
+    case UPDATE_LEVEL_TOTAL:
+      return {
+        ...app,
+        levelTotal: action.payload as { en: number; vi: number },
       };
     default:
       return app;
