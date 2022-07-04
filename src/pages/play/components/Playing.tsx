@@ -7,7 +7,11 @@ import bulb from '../../../assets/images/light-bulb.png';
 import wrong from '../../../assets/images/wrong.png';
 import styles from '../Play.module.scss';
 import { keyframes } from 'styled-components';
-import { useAppDispatch, useModalRef } from '../../../services/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useModalRef,
+} from '../../../services/hooks';
 import { Button, Modal } from '../../../components';
 import { correctStrings, getRandomInt } from '../../../services/helpers';
 import { PlayState } from '../type';
@@ -47,6 +51,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   const { t, i18n } = useTranslation();
   const trueModalRef = useModalRef();
   const dispatch = useAppDispatch();
+  const app = useAppSelector(state => state.app);
 
   const quizRequirement = useMemo(() => {
     switch (currentQuiz.type) {
@@ -149,6 +154,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   };
 
   const handleCorrect = () => {
+    dispatch(updateGainedScore(app.gainedScore + 10));
     trueModalRef.current?.showModal();
     setShowContent(false);
     setIsPausing(true);
@@ -270,12 +276,25 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
           break;
       }
     } else {
-      dispatch(updateRemainTime(0));
-      dispatch(updateGainedScore(0));
-      dispatch(updateGainedHint(0));
+      // complete level
+      dispatch(updateRemainTime(countDown));
+      dispatch(
+        updateGainedHint((countDown > 0 ? 1 : 0) + Math.round(countDown / 10))
+      );
       setPlayState('result');
     }
   }
+
+  const resetLevelResult = () => {
+    dispatch(updateRemainTime(0));
+    dispatch(updateGainedScore(0));
+    dispatch(updateGainedHint(0));
+  };
+
+  // Reset level data
+  useEffect(() => {
+    resetLevelResult();
+  }, []);
 
   // Time count down
   useEffect(() => {
@@ -293,11 +312,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   useEffect(() => {
     if (countDown <= 0) {
       clearInterval(intervalId);
-      dispatch(updateRemainTime(countDown));
-      dispatch(updateGainedScore(0));
-      dispatch(
-        updateGainedHint(countDown > 0 ? 1 : 0 + Math.round(countDown / 10))
-      );
+      resetLevelResult();
       setPlayState('result');
     }
   }, [countDown]);
