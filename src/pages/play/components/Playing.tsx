@@ -7,11 +7,16 @@ import bulb from '../../../assets/images/light-bulb.png';
 import wrong from '../../../assets/images/wrong.png';
 import styles from '../Play.module.scss';
 import { keyframes } from 'styled-components';
-import { useModalRef } from '../../../services/hooks';
+import { useAppDispatch, useModalRef } from '../../../services/hooks';
 import { Button, Modal } from '../../../components';
 import { correctStrings, getRandomInt } from '../../../services/helpers';
 import { PlayState } from '../type';
 import { CSSTransition } from 'react-transition-group';
+import {
+  updateGainedHint,
+  updateGainedScore,
+  updateRemainTime,
+} from '../../../services/@redux/actions/app';
 
 type PlayingProps = {
   level: Level;
@@ -30,16 +35,18 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   const [indexPositions, setIndexPositions] = useState<(number | undefined)[]>(
     initIndexPositions(currentQuiz)
   );
-  const [countDown, setCountDown] = useState(50);
+  const [countDown, setCountDown] = useState(120);
   const [intervalId, setIntervalId] = useState<any>(0);
   const [isPausing, setIsPausing] = useState(false);
   const [showWrong, setShowWrong] = useState(false);
+  const [showContent, setShowContent] = useState(true);
   const [correctTitle, setCorrectTitle] = useState(
     correctStrings[getRandomInt(5)]
   );
 
   const { t, i18n } = useTranslation();
   const trueModalRef = useModalRef();
+  const dispatch = useAppDispatch();
 
   const quizRequirement = useMemo(() => {
     switch (currentQuiz.type) {
@@ -134,6 +141,19 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
     }
   }, [currentQuiz, indexPositions, splitedQuizContent]);
 
+  const handleWrong = () => {
+    setShowWrong(true);
+    setTimeout(() => {
+      setShowWrong(false);
+    }, 1000);
+  };
+
+  const handleCorrect = () => {
+    trueModalRef.current?.showModal();
+    setShowContent(false);
+    setIsPausing(true);
+  };
+
   function onChooseLetter(index: number) {
     const chosenIndex = indexPositions.findIndex(i => i === index);
 
@@ -197,8 +217,9 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
 
   function onChooseChoice(chosenChoice: string) {
     if (chosenChoice.toLowerCase() === currentQuiz.answer.toLowerCase()) {
-      trueModalRef.current?.showModal();
-      setIsPausing(true);
+      handleCorrect();
+    } else {
+      handleWrong();
     }
   }
 
@@ -230,6 +251,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
     }, 300);
 
     if (currentQuizIndex < level.quizList.length - 1) {
+      setShowContent(true);
       setIsPausing(false);
       const nextQuiz = level.quizList[currentQuizIndex + 1];
       setCurrentQuizIndex(currentQuizIndex + 1);
@@ -248,6 +270,9 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
           break;
       }
     } else {
+      dispatch(updateRemainTime(0));
+      dispatch(updateGainedScore(0));
+      dispatch(updateGainedHint(0));
       setPlayState('result');
     }
   }
@@ -262,14 +287,19 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
     } else {
       clearInterval(intervalId);
     }
-
-    return () => clearInterval(intervalId);
   }, [isPausing]);
 
+  // Timeout
   useEffect(() => {
-    countDown <= 0 && clearInterval(intervalId);
-
-    return () => clearInterval(intervalId);
+    if (countDown <= 0) {
+      clearInterval(intervalId);
+      dispatch(updateRemainTime(countDown));
+      dispatch(updateGainedScore(0));
+      dispatch(
+        updateGainedHint(countDown > 0 ? 1 : 0 + Math.round(countDown / 10))
+      );
+      setPlayState('result');
+    }
   }, [countDown]);
 
   // Make position absolute
@@ -309,13 +339,9 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
       case 'shuffleLetters':
       case 'shuffleIdiom':
         if (currentQuiz.answer.toLowerCase() === mergedAnswer.toLowerCase()) {
-          trueModalRef.current?.showModal();
-          setIsPausing(true);
+          handleCorrect();
         } else if (currentQuiz.answer.length === mergedAnswer.length) {
-          setShowWrong(true);
-          setTimeout(() => {
-            setShowWrong(false);
-          }, 1000);
+          handleWrong();
         }
         break;
 
@@ -344,31 +370,45 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
           <div className={styles.countDown}>{countDown}</div>
         </div>
       </div>
+      <CSSTransition
+        in={showContent}
+        timeout={300}
+        appear
+        classNames={{
+          enter: styles.contentEnter,
+          enterActive: styles.contentEnterActive,
+          enterDone: styles.contentEnterDone,
+          exit: styles.contentExit,
+          exitActive: styles.contentExitActive,
+        }}
+      >
+        <div className={styles.content}>
+          <div className={styles.quizRequirement}>{quizRequirement}</div>
 
-      <div className={styles.quizRequirement}>{quizRequirement}</div>
+          <div className={styles.quizContent}>{currentQuiz.content}</div>
 
-      <div className={styles.quizContent}>{currentQuiz.content}</div>
+          {(currentQuiz.type === 'shuffleLetters' ||
+            currentQuiz.type === 'shuffleIdiom') && (
+            <div className={styles.belowWrapper}>
+              <div className={styles.chosenChoices}>{chosenChoices}</div>
 
-      {(currentQuiz.type === 'shuffleLetters' ||
-        currentQuiz.type === 'shuffleIdiom') && (
-        <div className={styles.belowWrapper}>
-          <div className={styles.chosenChoices}>{chosenChoices}</div>
+              <div className={styles.mergedAnswer}>{mergedAnswer}</div>
 
-          <div className={styles.mergedAnswer}>{mergedAnswer}</div>
+              <div className={styles.choices}>{choices}</div>
+            </div>
+          )}
 
-          <div className={styles.choices}>{choices}</div>
+          {currentQuiz.type === 'multipleChoice' && (
+            <div className={styles.multipleChoiceContainer}>
+              <div className={styles.multipleChoiceWrapper}>{choices}</div>
+            </div>
+          )}
+
+          <div className={styles.actions}>
+            <img src={bulb} alt="bulb-icon" />
+          </div>
         </div>
-      )}
-
-      {currentQuiz.type === 'multipleChoice' && (
-        <div className={styles.multipleChoiceContainer}>
-          <div className={styles.multipleChoiceWrapper}>{choices}</div>
-        </div>
-      )}
-
-      <div className={styles.actions}>
-        <img src={bulb} alt="bulb-icon" />
-      </div>
+      </CSSTransition>
 
       <Modal
         ref={trueModalRef}
@@ -407,6 +447,12 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
       >
         <img className={styles.wrongAnswer} src={wrong} alt="wrong" />
       </CSSTransition>
+      <img
+        className={styles.wrongAnswer}
+        src={wrong}
+        alt="wrong"
+        style={{ visibility: 'hidden' }}
+      />
     </div>
   );
 }

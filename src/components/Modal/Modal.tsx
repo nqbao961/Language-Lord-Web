@@ -129,12 +129,7 @@ function Modal(
       wrapperRef!?.current!?.focus();
       document.addEventListener('keydown', handlePressEsc);
       containerRef.current!.style.display = 'flex';
-
-      if (document.body.scrollHeight > window.innerHeight) {
-        document.body.classList.add('modal-show');
-      }
     } else {
-      document.body.classList.remove('modal-show');
       setTimeout(() => {
         containerRef.current!.style.display = 'none';
       }, 300);

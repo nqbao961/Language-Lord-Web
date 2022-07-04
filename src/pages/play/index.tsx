@@ -15,6 +15,7 @@ import { Level } from '../../services/models';
 import logo from '../../assets/images/logo-lang.png';
 import Result from './components/Result';
 import { SwitchTransition, CSSTransition } from 'react-transition-group';
+import { updatePlayingLevel } from '../../services/@redux/actions/app';
 
 export default function Play() {
   const [playState, setPlayState] = useState<PlayState>('selectLevel');
@@ -28,16 +29,26 @@ export default function Play() {
 
   const onClickPlayLevel = () => {
     dispatch(getLevel(`${user.preferedLang}-${user.level.en}`)).then(level => {
-      console.log(level);
+      dispatch(updatePlayingLevel(level.levelNumber));
       setCurrentLevel(level);
       setCountDown(3);
+      handleCountDown();
       setPlayState('ready');
-      const timer = setInterval(() => {
-        setCountDown(countDown => countDown - 1);
-      }, 1000);
-      setIntervalId(timer);
     });
   };
+
+  const replay = () => {
+    setCountDown(3);
+    handleCountDown();
+    setPlayState('ready');
+  };
+
+  function handleCountDown() {
+    const timer = setInterval(() => {
+      setCountDown(countDown => countDown - 1);
+    }, 1000);
+    setIntervalId(timer);
+  }
 
   useEffect(() => {
     countDown === -1 && clearInterval(intervalId);
@@ -86,7 +97,9 @@ export default function Play() {
             {playState === 'playing' && currentLevel && (
               <Playing level={currentLevel} setPlayState={setPlayState} />
             )}
-            {playState === 'result' && <Result setPlayState={setPlayState} />}
+            {playState === 'result' && (
+              <Result setPlayState={setPlayState} replay={replay} />
+            )}
           </div>
         </CSSTransition>
       </SwitchTransition>

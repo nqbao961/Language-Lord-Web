@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import ribbonStars from '../../../assets/images/ribbon-stars.png';
+import ribbonNoStars from '../../../assets/images/ribbon-nostars.png';
 import brain from '../../../assets/images/brain.png';
 import home from '../../../assets/images/home.png';
 import repeat from '../../../assets/images/repeat.png';
@@ -14,9 +15,10 @@ import { CSSTransition } from 'react-transition-group';
 
 type ResultProps = {
   setPlayState: React.Dispatch<React.SetStateAction<PlayState>>;
+  replay: () => void;
 };
 
-export default function Result({ setPlayState }: ResultProps) {
+export default function Result({ setPlayState, replay }: ResultProps) {
   const [show, setShow] = useState(false);
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
@@ -40,12 +42,16 @@ export default function Result({ setPlayState }: ResultProps) {
         <div className={styles.result}>
           <img
             className={styles.ribbonImg}
-            src={ribbonStars}
+            src={app.remainTime > 0 ? ribbonStars : ribbonNoStars}
             alt="ribbonStars"
           />
           <div className={styles.ribbonText}>
             <div>{`${t('Level')} ${app.playingLevel}`} </div>
-            <div>{t('Complete').toUpperCase()}</div>
+            <div>
+              {app.remainTime > 0
+                ? t('Complete').toUpperCase()
+                : t('Failed').toUpperCase()}
+            </div>
           </div>
           <div className={styles.ribbonContent}>
             <div className={styles.ribbonContentRow}>
@@ -70,24 +76,26 @@ export default function Result({ setPlayState }: ResultProps) {
               <div className={styles.ribbonContentTitle}>{t('Reward')}</div>
               <div className={styles.ribbonContentGroup}>
                 <img src={lightBulb} alt="lightBulb" />
-                <div className={styles.ribbonContentText}>{`+${
-                  1 + Math.round(app.remainTime / 10)
-                }`}</div>
+                <div
+                  className={styles.ribbonContentText}
+                >{`+${app.gainedHint}`}</div>
               </div>
             </div>
 
             <div className={styles.ribbonActions}>
-              <img src={repeat} alt="repeat" />
+              <img src={repeat} alt="repeat" onClick={() => replay()} />
               <img
                 src={home}
                 alt="home"
                 onClick={() => setPlayState('selectLevel')}
               />
-              <img
-                src={next}
-                alt="next"
-                onClick={() => setPlayState('ready')}
-              />
+              {app.remainTime > 0 && (
+                <img
+                  src={next}
+                  alt="next"
+                  onClick={() => setPlayState('ready')}
+                />
+              )}
             </div>
           </div>
         </div>
