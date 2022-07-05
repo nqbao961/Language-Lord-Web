@@ -28,6 +28,10 @@
   opacity: 0;
 }
 
+.bigFont {
+  font-family: 'Sigmar One';
+}
+
 // Play state animation
 .playEnter {
   opacity: 0;
@@ -135,6 +139,8 @@
   display: inline-flex;
   flex-direction: column;
   justify-content: space-between;
+  font-family: 'Sigmar One';
+  color: var(--on-primary);
 
   .wrapper {
     display: flex;
@@ -163,6 +169,7 @@
 }
 
 .ready {
+  font-family: 'Sigmar One';
   background-color: var(--background);
   height: calc(100% - 24px * 2);
   margin: 24px;
@@ -205,6 +212,9 @@
 }
 
 .currentLevel {
+  font-family: 'Sigmar One';
+  color: var(--on-primary);
+
   p {
     margin: 0;
 
@@ -318,7 +328,7 @@
 .actions {
   display: flex;
   justify-content: center;
-  margin-top: 14px;
+  margin-top: 24px;
 
   img {
     width: 38px;
@@ -339,12 +349,9 @@
   gap: 12px;
 }
 
-.choiceItem {
-  padding: 8px;
-}
-
 // Correct modal
 .headerModal {
+  font-family: 'Sigmar One';
   background-color: var(--primary-header);
   color: var(--on-primary-header);
   text-align: center;
@@ -387,6 +394,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  font-family: 'Sigmar One';
 }
 
 .result {
@@ -412,8 +420,6 @@
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-    text-transform: uppercase;
-    font-weight: bold;
 
     div:first-child {
       color: #b20d78;
@@ -421,7 +427,7 @@
     }
     div:last-child {
       color: #fff;
-      font-size: 28px;
+      font-size: 22px;
       text-shadow: 4px 4px #b20d78;
     }
   }

@@ -50,7 +50,7 @@ export default function Result({ setPlayState, replay }: ResultProps) {
             <div>
               {app.remainTime > 0
                 ? t('Complete').toUpperCase()
-                : t('Failed').toUpperCase()}
+                : t('Failed').toUpperCase() + '!'}
             </div>
           </div>
           <div className={styles.ribbonContent}>

@@ -39,15 +39,17 @@
 }
 .choice {
   border: 2px solid var(--on-button-primary);
-  background-color: var(--button-primary);
+  background-color: var(--button-choice-primary);
+  padding: 8px 8px 10px;
+
   &:hover {
-    background-color: var(--hover-button-primary);
+    background-color: var(--hover-button-choice-primary);
   }
   &:active {
     border: 2px solid var(--on-button-primary);
-    background-color: var(--hover-button-primary);
+    background-color: var(--hover-button-choice-primary);
     box-shadow: none;
-    padding-bottom: 9.5px;
+    padding-bottom: 8px;
     margin-top: 2px;
   }
   &.disabled {

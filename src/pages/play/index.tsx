@@ -66,16 +66,28 @@ export default function Play() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.headerWrapper}>
-          <Profile />
-          <ScoreHint />
+      <CSSTransition
+        in={playState !== 'playing'}
+        timeout={300}
+        unmountOnExit
+        classNames={{
+          enter: styles.contentEnter,
+          enterActive: styles.contentEnterActive,
+          exit: styles.contentExit,
+          exitActive: styles.contentExitActive,
+        }}
+      >
+        <div className={styles.header}>
+          <div className={styles.headerWrapper}>
+            <Profile />
+            <ScoreHint />
+          </div>
+          <div className={styles.headerWrapper}>
+            <Rank />
+            <Setting />
+          </div>
         </div>
-        <div className={styles.headerWrapper}>
-          <Rank />
-          <Setting />
-        </div>
-      </div>
+      </CSSTransition>
 
       <SwitchTransition>
         <CSSTransition
@@ -97,7 +109,7 @@ export default function Play() {
                 {app.levelTotal[user.preferedLang] >=
                 user.level[user.preferedLang] ? (
                   <Button
-                    className={styles.playLevelButton}
+                    className={`${styles.playLevelButton} ${styles.bigFont}`}
                     label={`${t('Level')} ${user.level.en}`}
                     handleClick={onClickPlayLevel}
                   />

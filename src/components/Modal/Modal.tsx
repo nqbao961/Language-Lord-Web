@@ -106,6 +106,7 @@ function Modal(
           {showCloseButton && (
             <div className={styles.footer}>
               <Button
+                className={styles.bigFont}
                 label="Okay"
                 handleClick={() => {
                   handleOkay && handleOkay();
