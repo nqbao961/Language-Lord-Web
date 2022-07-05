@@ -9,6 +9,7 @@ export interface Location {
 export interface User {
   _id: string;
   email: string;
+  name: string;
   role: 'admin' | 'user';
   avatar?: string;
   preferedLang: 'en' | 'vi';

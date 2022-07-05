@@ -12,6 +12,7 @@ import {
 const defaultUserState: User = {
   _id: 'guest',
   email: '',
+  name: 'Guest User',
   role: 'user',
   preferedLang: 'en',
   level: { vi: 1, en: 1 },
