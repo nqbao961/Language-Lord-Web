@@ -27,6 +27,11 @@ $inverse-surface-light: #313033;
 $inverse-on-surface-light: #f4eff4;
 $primary-header-light: #4cdafe;
 $on-primary-header-light: #ffffff;
+$button-primary-light: #67eb00;
+$on-button-primary-light: #ffffff;
+$hover-button-primary-light: #81ef2c;
+$button-choice-primary-light: #4cdafe;
+$hover-button-choice-primary-light: #94e7fc;
 // dark
 $primary-dark: #b4c4ff;
 $on-primary-dark: #002781;
@@ -57,6 +62,11 @@ $inverse-surface-dark: #e6e1e5;
 $inverse-on-surface-dark: #1c1b1f;
 $primary-header-dark: #4cdafe;
 $on-primary-header-dark: #ffffff;
+$button-primary-dark: #c286ff;
+$on-button-primary-dark: #ffffff;
+$hover-button-primary-dark: #d6affe;
+$button-choice-primary-dark: #fc8aff;
+$hover-button-choice-primary-dark: #fdc0ff;
 
 $transparent: #ffffff00;
 $transparent-black: rgba(0, 0, 0, 0.3);
@@ -93,6 +103,11 @@ $transparent-black: rgba(0, 0, 0, 0.3);
   --transparent-black: #{$transparent-black};
   --primary-header: #{$primary-header-light};
   --on-primary-header: #{$on-primary-header-light};
+  --button-primary: #{$button-primary-light};
+  --on-button-primary: #{$on-button-primary-light};
+  --hover-button-primary: #{$hover-button-primary-light};
+  --button-choice-primary: #{$button-choice-primary-light};
+  --hover-button-choice-primary: #{$hover-button-choice-primary-light};
 }
 .dark {
   --primary: #{$primary-dark};
@@ -126,4 +141,9 @@ $transparent-black: rgba(0, 0, 0, 0.3);
   --transparent-black: #{$transparent-black};
   --primary-header: #{$primary-header-dark};
   --on-primary-header: #{$on-primary-header-dark};
+  --button-primary: #{$button-primary-dark};
+  --on-button-primary: #{$on-button-primary-dark};
+  --hover-button-primary: #{$hover-button-primary-dark};
+  --button-choice-primary: #{$button-choice-primary-dark};
+  --hover-button-choice-primary: #{$hover-button-choice-primary-dark};
 }

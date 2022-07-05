@@ -4,7 +4,7 @@ type ButtonProps = {
   label: string | JSX.Element;
   className?: string;
   kind?: 'button' | 'fab';
-  type?: 'primary' | 'danger' | 'outline' | 'transparent';
+  type?: 'primary' | 'danger' | 'outline' | 'transparent' | 'choice';
   disabled?: boolean;
   handleClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };

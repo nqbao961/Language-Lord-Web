@@ -121,6 +121,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
           <Button
             key={`choice-${index}`}
             label={choice}
+            type="choice"
             className={styles.choiceItem}
             handleClick={() => onChooseChoice(choice)}
           />
