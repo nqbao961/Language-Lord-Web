@@ -61,6 +61,10 @@ export default function Play() {
   }, []);
 
   useEffect(() => {
+    localStorage.setItem('user', JSON.stringify(user));
+  }, [user]);
+
+  useEffect(() => {
     countDown === -1 && clearInterval(intervalId);
   }, [countDown]);
 

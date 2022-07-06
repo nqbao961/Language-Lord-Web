@@ -9,18 +9,21 @@ import {
   UPDATE_USER_SCORE,
 } from '../actionTypes';
 
-const defaultUserState: User = {
-  _id: 'guest',
-  email: '',
-  name: 'Guest User',
-  role: 'user',
-  preferedLang:
-    (localStorage.getItem('i18nextLng') as User['preferedLang'] | null) || 'en',
-  level: { vi: 1, en: 1 },
-  score: { vi: 0, en: 0 },
-  hint: { vi: 3, en: 3 },
-  completedQuizzes: { vi: [], en: [] },
-};
+const defaultUserState: User = localStorage.getItem('user')
+  ? (JSON.parse(localStorage.getItem('user')!) as User)
+  : {
+      _id: 'guest',
+      email: '',
+      name: 'Guest User',
+      role: 'user',
+      preferedLang:
+        (localStorage.getItem('i18nextLng') as User['preferedLang'] | null) ||
+        'en',
+      level: { vi: 1, en: 1 },
+      score: { vi: 0, en: 0 },
+      hint: { vi: 3, en: 3 },
+      completedQuizzes: { vi: [], en: [] },
+    };
 
 export default (user = defaultUserState, action: AnyAction) => {
   const lang = user.preferedLang;
@@ -32,6 +35,8 @@ export default (user = defaultUserState, action: AnyAction) => {
         : defaultUserState;
 
     case UPDATE_USER_LANG:
+      localStorage.setItem('preferedLang', action.payload);
+
       return {
         ...user,
         preferedLang: action.payload,

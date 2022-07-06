@@ -21,6 +21,10 @@ import {
   updateGainedScore,
   updateRemainTime,
 } from '../../../services/@redux/actions/app';
+import {
+  updateUserHint,
+  updateUserScore,
+} from '../../../services/@redux/actions';
 
 type PlayingProps = {
   level: Level;
@@ -52,6 +56,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   const trueModalRef = useModalRef();
   const dispatch = useAppDispatch();
   const app = useAppSelector(state => state.app);
+  const user = useAppSelector(state => state.user);
 
   const quizRequirement = useMemo(() => {
     switch (currentQuiz.type) {
@@ -145,6 +150,11 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
         return '';
     }
   }, [currentQuiz, indexPositions, splitedQuizContent]);
+
+  const isCompletedQuiz = useMemo(
+    () => user.completedQuizzes[user.preferedLang].includes(currentQuiz._id),
+    [currentQuiz]
+  );
 
   const handleWrong = () => {
     setShowWrong(true);
@@ -255,6 +265,8 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
     setTimeout(() => {
       setCorrectTitle(correctStrings[getRandomInt(5)]);
     }, 300);
+    const gainedScore = app.gainedScore + 10;
+    dispatch(updateGainedScore(gainedScore));
 
     if (currentQuizIndex < level.quizList.length - 1) {
       setShowContent(true);
@@ -277,10 +289,12 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
       }
     } else {
       // complete level
+      const gainedHint = (countDown > 0 ? 1 : 0) + Math.round(countDown / 10);
+      dispatch(updateUserScore(user.score[user.preferedLang] + gainedScore));
+      dispatch(updateUserHint(user.hint[user.preferedLang] + gainedHint));
       dispatch(updateRemainTime(countDown));
-      dispatch(
-        updateGainedHint((countDown > 0 ? 1 : 0) + Math.round(countDown / 10))
-      );
+      dispatch(updateGainedHint(gainedHint));
+
       setPlayState('result');
     }
   }
@@ -439,10 +453,12 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
                 <div className={styles.infoText}>{currentQuiz.info}</div>
               )}
             </div>
-            <div className={styles.gainedScore}>
-              <img src={brain} alt="brain-icon" />
-              +10
-            </div>
+            {!isCompletedQuiz && (
+              <div className={styles.gainedScore}>
+                <img src={brain} alt="brain-icon" />
+                +10
+              </div>
+            )}
           </>
         }
         handleOkay={gotoNextQuiz}
