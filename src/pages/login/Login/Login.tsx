@@ -15,7 +15,7 @@ export default function Login() {
   }, [token]);
 
   const login = () => {
-    localStorage.setItem('token', '123');
+    localStorage.setItem('token', 'guest');
     localStorage.setItem('preferedLang', 'vi');
     localStorage.setItem('theme', '');
     navigate(from, { replace: true });

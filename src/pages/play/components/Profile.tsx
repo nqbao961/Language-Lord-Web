@@ -3,15 +3,19 @@ import styles from '../Play.module.scss';
 import userMale from '../../../assets/images/user-male.png';
 import vietnamFlag from '../../../assets/images/vietnam.png';
 import usFlag from '../../../assets/images/united-states.png';
-import { Modal } from '../../../components';
+import { Button, Modal } from '../../../components';
 import {
   useAppDispatch,
   useAppSelector,
   useModalRef,
 } from '../../../services/hooks';
+import { useTranslation } from 'react-i18next';
+import { User } from '../../../services/models';
+import { updateUserLang } from '../../../services/@redux/actions';
 
 export default function Profile() {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const userModalRef = useModalRef();
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.user);
@@ -19,6 +23,11 @@ export default function Profile() {
   const logout = () => {
     localStorage.removeItem('token');
     navigate('/login', { replace: true });
+  };
+
+  const changeLang = (lang: User['preferedLang']) => {
+    dispatch(updateUserLang(lang));
+    i18n.changeLanguage(lang);
   };
 
   return (
@@ -29,7 +38,10 @@ export default function Profile() {
       >
         <img src={userMale} alt="profile-picture" />
         <div className={styles.currentLanguage}>
-          <img src={usFlag} alt="flag" />
+          <img
+            src={user.preferedLang === 'en' ? usFlag : vietnamFlag}
+            alt="flag"
+          />
         </div>
       </div>
 
@@ -37,8 +49,39 @@ export default function Profile() {
         ref={userModalRef}
         body={
           <div className={styles.userBodyModal}>
-            <img src={userMale} alt="profile-picture" />
-            <div>{user.name}</div>
+            <h2>{t('Profile')}</h2>
+
+            <div className={styles.userBodyRow}>
+              <div className={styles.profileButton}>
+                <img src={userMale} alt="profile-picture" />
+              </div>
+              <div>{user.name}</div>
+            </div>
+
+            <div className={styles.userBodyRow}>
+              <div>{t('Language')}</div>
+              <div className={styles.language}>
+                <img
+                  className={user.preferedLang === 'en' ? styles.active : ''}
+                  src={usFlag}
+                  alt="us-flag"
+                  onClick={() => changeLang('en')}
+                />
+                <img
+                  className={user.preferedLang === 'vi' ? styles.active : ''}
+                  src={vietnamFlag}
+                  alt="vietnam-flag"
+                  onClick={() => changeLang('vi')}
+                />
+              </div>
+            </div>
+
+            <Button
+              className={styles.bigFont}
+              label={t('Logout')}
+              type="danger"
+              handleClick={() => logout()}
+            />
           </div>
         }
         showClose={false}

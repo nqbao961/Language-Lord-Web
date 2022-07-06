@@ -14,7 +14,8 @@ const defaultUserState: User = {
   email: '',
   name: 'Guest User',
   role: 'user',
-  preferedLang: 'en',
+  preferedLang:
+    (localStorage.getItem('i18nextLng') as User['preferedLang'] | null) || 'en',
   level: { vi: 1, en: 1 },
   score: { vi: 0, en: 0 },
   hint: { vi: 3, en: 3 },
