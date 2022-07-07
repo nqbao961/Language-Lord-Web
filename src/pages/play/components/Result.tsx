@@ -16,9 +16,14 @@ import { CSSTransition } from 'react-transition-group';
 type ResultProps = {
   setPlayState: React.Dispatch<React.SetStateAction<PlayState>>;
   replay: () => void;
+  handleNextLevel: () => void;
 };
 
-export default function Result({ setPlayState, replay }: ResultProps) {
+export default function Result({
+  setPlayState,
+  replay,
+  handleNextLevel,
+}: ResultProps) {
   const [show, setShow] = useState(false);
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
@@ -90,11 +95,7 @@ export default function Result({ setPlayState, replay }: ResultProps) {
                 onClick={() => setPlayState('selectLevel')}
               />
               {app.remainTime > 0 && (
-                <img
-                  src={next}
-                  alt="next"
-                  onClick={() => setPlayState('ready')}
-                />
+                <img src={next} alt="next" onClick={() => handleNextLevel()} />
               )}
             </div>
           </div>

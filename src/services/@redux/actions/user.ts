@@ -32,6 +32,6 @@ export const updateUserHint = (hint: number) => (dispatch: AppDispatch) => {
 };
 
 export const updateUserQuizzes =
-  (completedQuizId: string) => (dispatch: AppDispatch) => {
-    dispatch({ type: UPDATE_USER_QUIZZES, payload: completedQuizId });
+  (completedQuizIdList: string[]) => (dispatch: AppDispatch) => {
+    dispatch({ type: UPDATE_USER_QUIZZES, payload: completedQuizIdList });
   };

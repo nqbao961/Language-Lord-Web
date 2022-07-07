@@ -71,7 +71,10 @@ export default (user = defaultUserState, action: AnyAction) => {
 
     case UPDATE_USER_QUIZZES:
       const completedQuizzes = { ...user.completedQuizzes };
-      completedQuizzes[lang] = [...user.completedQuizzes[lang], action.payload];
+      completedQuizzes[lang] = [
+        ...user.completedQuizzes[lang],
+        ...action.payload,
+      ];
 
       return {
         ...user,

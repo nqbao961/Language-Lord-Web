@@ -23,6 +23,8 @@ import {
 } from '../../../services/@redux/actions/app';
 import {
   updateUserHint,
+  updateUserLevel,
+  updateUserQuizzes,
   updateUserScore,
 } from '../../../services/@redux/actions';
 
@@ -164,7 +166,12 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   };
 
   const handleCorrect = () => {
-    dispatch(updateGainedScore(app.gainedScore + 10));
+    dispatch(updateGainedScore(app.gainedScore + (isCompletedQuiz ? 0 : 10)));
+    if (!isCompletedQuiz) {
+      dispatch(updateUserScore(user.score[user.preferedLang] + 10));
+      dispatch(updateUserQuizzes([currentQuiz._id]));
+    }
+
     trueModalRef.current?.showModal();
     setShowContent(false);
     setIsPausing(true);
@@ -265,8 +272,6 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
     setTimeout(() => {
       setCorrectTitle(correctStrings[getRandomInt(5)]);
     }, 300);
-    const gainedScore = app.gainedScore + 10;
-    dispatch(updateGainedScore(gainedScore));
 
     if (currentQuizIndex < level.quizList.length - 1) {
       setShowContent(true);
@@ -290,8 +295,10 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
     } else {
       // complete level
       const gainedHint = (countDown > 0 ? 1 : 0) + Math.round(countDown / 10);
-      dispatch(updateUserScore(user.score[user.preferedLang] + gainedScore));
+
       dispatch(updateUserHint(user.hint[user.preferedLang] + gainedHint));
+      dispatch(updateUserLevel(level.levelNumber + 1));
+
       dispatch(updateRemainTime(countDown));
       dispatch(updateGainedHint(gainedHint));
 

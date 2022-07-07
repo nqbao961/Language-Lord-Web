@@ -114,7 +114,7 @@ export default function Play() {
                 user.level[user.preferedLang] ? (
                   <Button
                     className={`${styles.playLevelButton} ${styles.bigFont}`}
-                    label={`${t('Level')} ${user.level.en}`}
+                    label={`${t('Level')} ${user.level[user.preferedLang]}`}
                     handleClick={onClickPlayLevel}
                   />
                 ) : (
@@ -129,7 +129,11 @@ export default function Play() {
               <Playing level={currentLevel} setPlayState={setPlayState} />
             )}
             {playState === 'result' && (
-              <Result setPlayState={setPlayState} replay={replay} />
+              <Result
+                setPlayState={setPlayState}
+                replay={replay}
+                handleNextLevel={onClickPlayLevel}
+              />
             )}
           </div>
         </CSSTransition>
