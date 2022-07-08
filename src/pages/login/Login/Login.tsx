@@ -1,12 +1,21 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../../../components';
-import { Location } from '../../../services/models';
+import { Location, User } from '../../../services/models';
+import styles from './Login.module.scss';
+import logo from '../../../assets/images/logo-lang.png';
+import google from '../../../assets/images/google.png';
+import i18next from 'i18next';
+import { useAppDispatch } from '../../../services/hooks';
+import { updateUserLang } from '../../../services/@redux/actions';
 
 export default function Login() {
+  const { t, i18n } = useTranslation();
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
   const location: Location = useLocation();
+  const dispatch = useAppDispatch();
 
   const from = location.state?.from?.pathname || '/play';
 
@@ -16,13 +25,26 @@ export default function Login() {
 
   const login = () => {
     localStorage.setItem('token', 'guest');
-    localStorage.setItem('preferedLang', 'vi');
+    localStorage.setItem('i18nextLng', i18next.languages[0]);
+    dispatch(updateUserLang(i18next.languages[0] as User['preferedLang']));
     localStorage.setItem('theme', '');
     navigate(from, { replace: true });
   };
   return (
-    <div>
-      <Button label="Login" handleClick={login} />
+    <div className={styles.container}>
+      <img className={styles.logo} src={logo} alt="logo" />
+      <div className={styles.buttonGroup}>
+        <Button label={t('Play as guest')} handleClick={login} />
+        <Button
+          label={
+            <div className={styles.buttonWithIcon}>
+              <img src={google} alt="google-icon" />
+              <div>{t('Login with Google')}</div>
+            </div>
+          }
+          handleClick={() => {}}
+        />
+      </div>
     </div>
   );
 }

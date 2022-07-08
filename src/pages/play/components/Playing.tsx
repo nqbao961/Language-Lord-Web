@@ -34,6 +34,7 @@ type PlayingProps = {
 };
 
 export default function Playing({ level, setPlayState }: PlayingProps) {
+  const { t, i18n } = useTranslation();
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
   const [currentQuiz, setCurrentQuiz] = useState(level.quizList[0]);
   const [chosenCellPositions, setChosenCellPositions] = useState<
@@ -51,10 +52,9 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   const [showWrong, setShowWrong] = useState(false);
   const [showContent, setShowContent] = useState(true);
   const [correctTitle, setCorrectTitle] = useState(
-    correctStrings[getRandomInt(5)]
+    t(correctStrings[getRandomInt(5)]).toUpperCase() + '!!!'
   );
 
-  const { t, i18n } = useTranslation();
   const trueModalRef = useModalRef();
   const dispatch = useAppDispatch();
   const app = useAppSelector(state => state.app);
@@ -88,15 +88,31 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
     switch (currentQuiz.type) {
       case 'shuffleLetters':
       case 'shuffleIdiom':
-        return splitedQuizContent.map((_, index) => (
-          <div
-            key={`chosen-${index}`}
-            className={
-              currentQuiz.type === 'shuffleLetters'
-                ? styles.toChooseLetterCell
-                : styles.toChooseWordCell
-            }
-          ></div>
+        let letterIndex = 0;
+        const groupList =
+          currentQuiz.type === 'shuffleLetters'
+            ? currentQuiz.answer.split(' ')
+            : [currentQuiz.answer];
+
+        return groupList.map((group, index) => (
+          <div key={`chosenGroup-${index}`} className={styles.letterGroup}>
+            {group
+              .split(currentQuiz.type === 'shuffleLetters' ? '' : ' ')
+              .map(_ => {
+                const cell = (
+                  <div
+                    key={`chosen-${letterIndex}`}
+                    className={
+                      currentQuiz.type === 'shuffleLetters'
+                        ? styles.toChooseLetterCell
+                        : styles.toChooseWordCell
+                    }
+                  ></div>
+                );
+                letterIndex++;
+                return cell;
+              })}
+          </div>
         ));
 
       default:
@@ -108,18 +124,35 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
     switch (currentQuiz.type) {
       case 'shuffleLetters':
       case 'shuffleIdiom':
-        return splitedQuizContent.map((letter, index) => (
-          <div
-            key={`letter-${index}`}
-            className={
-              currentQuiz.type === 'shuffleLetters'
-                ? styles.letterCell
-                : styles.wordCell
-            }
-            onClick={() => onChooseLetter(index)}
-            style={cellStyles[index]}
-          >
-            {letter}
+        let letterIndex = 0;
+        const groupList =
+          currentQuiz.type === 'shuffleLetters'
+            ? currentQuiz.answer.split(' ')
+            : [currentQuiz.answer];
+
+        return groupList.map((group, index) => (
+          <div key={`letterGroup-${index}`} className={styles.letterGroup}>
+            {group
+              .split(currentQuiz.type === 'shuffleLetters' ? '' : ' ')
+              .map(_ => {
+                const currentIndex = letterIndex;
+                const cell = (
+                  <div
+                    key={`letter-${letterIndex}`}
+                    className={
+                      currentQuiz.type === 'shuffleLetters'
+                        ? styles.letterCell
+                        : styles.wordCell
+                    }
+                    onClick={() => onChooseLetter(currentIndex)}
+                    style={cellStyles[letterIndex]}
+                  >
+                    {splitedQuizContent[letterIndex]}
+                  </div>
+                );
+                letterIndex++;
+                return cell;
+              })}
           </div>
         ));
 
@@ -139,14 +172,28 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   }, [currentQuiz, cellStyles]);
 
   const mergedAnswer = useMemo(() => {
-    const stringArr = indexPositions.map(i =>
-      i !== undefined ? splitedQuizContent[i] : ''
-    );
     switch (currentQuiz.type) {
       case 'shuffleLetters':
+        const spaceIndexList = currentQuiz.answer
+          .split('')
+          .reduce(
+            (list, char, index) =>
+              char === ' ' ? [...list, index - list.length] : list,
+            [] as number[]
+          );
+        const stringArr = indexPositions.map((i, index) =>
+          i !== undefined
+            ? spaceIndexList.includes(index)
+              ? ' ' + splitedQuizContent[i]
+              : splitedQuizContent[i]
+            : ''
+        );
         return stringArr.join('');
       case 'shuffleIdiom':
-        return stringArr.join(' ');
+        const stringIdiomArr = indexPositions.map((i, index) =>
+          i !== undefined ? splitedQuizContent[i] : ''
+        );
+        return stringIdiomArr.join(' ');
 
       default:
         return '';
@@ -270,7 +317,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
 
   function gotoNextQuiz() {
     setTimeout(() => {
-      setCorrectTitle(correctStrings[getRandomInt(5)]);
+      setCorrectTitle(t(correctStrings[getRandomInt(5)]).toUpperCase() + '!!!');
     }, 300);
 
     if (currentQuizIndex < level.quizList.length - 1) {
@@ -333,7 +380,8 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   useEffect(() => {
     if (countDown <= 0) {
       clearInterval(intervalId);
-      resetLevelResult();
+      dispatch(updateRemainTime(0));
+      dispatch(updateGainedHint(0));
       setPlayState('result');
     }
   }, [countDown]);
@@ -347,11 +395,13 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
       const newCellStyles: any[] = [];
       Array.from(
         document.getElementsByClassName(styles.choices)[0].children!
-      ).forEach(cell => {
-        newCellStyles.push({
-          position: 'absolute',
-          top: (cell as HTMLDivElement).offsetTop,
-          left: (cell as HTMLDivElement).offsetLeft,
+      ).forEach(group => {
+        Array.from(group.children!).forEach(cell => {
+          newCellStyles.push({
+            position: 'absolute',
+            top: (cell as HTMLDivElement).offsetTop,
+            left: (cell as HTMLDivElement).offsetLeft,
+          });
         });
       });
       setCellStyles(newCellStyles);
@@ -359,10 +409,12 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
       const newCellPositions: any[] = [];
       Array.from(
         document.getElementsByClassName(styles.chosenChoices)[0].children!
-      ).forEach(cell => {
-        newCellPositions.push({
-          top: (cell as HTMLDivElement).offsetTop,
-          left: (cell as HTMLDivElement).offsetLeft,
+      ).forEach(group => {
+        Array.from(group.children!).forEach(cell => {
+          newCellPositions.push({
+            top: (cell as HTMLDivElement).offsetTop,
+            left: (cell as HTMLDivElement).offsetLeft,
+          });
         });
       });
       setChosenCellPositions(newCellPositions);

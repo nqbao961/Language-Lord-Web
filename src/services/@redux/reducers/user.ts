@@ -17,8 +17,9 @@ const defaultUserState: User = localStorage.getItem('user')
       name: 'Guest User',
       role: 'user',
       preferedLang:
-        (localStorage.getItem('i18nextLng') as User['preferedLang'] | null) ||
-        'en',
+        (localStorage.getItem('i18nextLng')?.slice(0, 2) as
+          | User['preferedLang']
+          | null) || 'en',
       level: { vi: 1, en: 1 },
       score: { vi: 0, en: 0 },
       hint: { vi: 3, en: 3 },
@@ -35,8 +36,6 @@ export default (user = defaultUserState, action: AnyAction) => {
         : defaultUserState;
 
     case UPDATE_USER_LANG:
-      localStorage.setItem('preferedLang', action.payload);
-
       return {
         ...user,
         preferedLang: action.payload,
