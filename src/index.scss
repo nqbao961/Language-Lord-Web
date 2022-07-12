@@ -16,7 +16,6 @@ body {
   line-height: 20px;
   color: var(--on-background);
   background-color: var(--secondary-container);
-  max-width: $body-max-width;
   transition: background-color 0.2s, color 0.2s;
 
   .simplebar-track.simplebar-vertical {
@@ -27,6 +26,10 @@ body {
     right: 4px;
     background: var(--secondary);
   }
+}
+
+body.play {
+  max-width: $body-max-width;
 }
 
 input,

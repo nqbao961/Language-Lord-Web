@@ -58,6 +58,7 @@ export default function Play() {
 
   useEffect(() => {
     dispatch(getLevelTotal());
+    document.body.classList.add('play');
   }, []);
 
   useEffect(() => {
