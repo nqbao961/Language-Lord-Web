@@ -1,5 +1,6 @@
 import { RouteObject, useRoutes } from 'react-router-dom';
 import Admin from '../../pages/admin';
+import Auth from '../../pages/auth';
 import Dashboard from '../../pages/dashboard';
 import LevelCreate from '../../pages/levelCreate';
 import Levels from '../../pages/levels';
@@ -63,6 +64,7 @@ export const adminRoutes: RouteWithTitleObject[] = [
 
 export const routes: RouteWithTitleObject[] = [
   { path: 'login', element: <Login /> },
+  { path: 'google/redirect', element: <Auth /> },
   {
     path: '/',
     element: <RequireAuth />,

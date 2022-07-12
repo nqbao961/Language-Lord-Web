@@ -4,8 +4,8 @@ import { selectEnv } from '../env';
 
 export const baseURL = selectEnv({
   dev: 'http://localhost:5000',
-  staging: 'https://language-lord-api.herokuapp.com/',
-  prod: 'https://language-lord-api.herokuapp.com/',
+  staging: 'https://language-lord-api.herokuapp.com',
+  prod: 'https://language-lord-api.herokuapp.com',
 });
 
 const token = localStorage.getItem('token');

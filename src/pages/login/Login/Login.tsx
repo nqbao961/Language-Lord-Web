@@ -9,6 +9,7 @@ import google from '../../../assets/images/google.png';
 import i18next from 'i18next';
 import { useAppDispatch } from '../../../services/hooks';
 import { updateUserLang } from '../../../services/@redux/actions';
+import { baseURL } from '../../../services/api/config';
 
 export default function Login() {
   const { t, i18n } = useTranslation();
@@ -30,6 +31,11 @@ export default function Login() {
     localStorage.setItem('theme', '');
     navigate(from, { replace: true });
   };
+
+  const handleGoogleLogin = () => {
+    window.location.href = baseURL + '/google';
+  };
+
   return (
     <div className={styles.container}>
       <img className={styles.logo} src={logo} alt="logo" />
@@ -42,7 +48,9 @@ export default function Login() {
               <div>{t('Login with Google')}</div>
             </div>
           }
-          handleClick={() => {}}
+          handleClick={() => {
+            handleGoogleLogin();
+          }}
         />
       </div>
     </div>
