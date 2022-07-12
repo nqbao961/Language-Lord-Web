@@ -19,15 +19,16 @@ interface LevelzesData {
 export default function Levels() {
   const dispatch = useAppDispatch();
   const levels = useAppSelector(state => state.levels);
+  const user = useAppSelector(state => state.user);
 
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
     dispatch(getLevels());
-  }, [dispatch]);
+  }, [dispatch, user.preferedLang]);
 
-  const columns: Column[] = useMemo(() => createColumns(t), []);
+  const columns: Column[] = useMemo(() => createColumns(t), [i18n.language]);
   const data: LevelzesData[] = useMemo(
     () => createRowsData(levels, navigate),
     [levels]

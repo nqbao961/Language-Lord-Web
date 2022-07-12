@@ -34,6 +34,10 @@ export function Sidebar() {
     navigate('/login', { replace: true });
   };
 
+  useEffect(() => {
+    localStorage.setItem('user', JSON.stringify(user));
+  }, [user]);
+
   const handleMouseDown = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) => {

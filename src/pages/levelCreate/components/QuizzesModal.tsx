@@ -22,7 +22,7 @@ export default function QuizzesModal({
 
   const allQuizzesColumns: Column[] = useMemo(
     () => createAllQuizzesColumns(),
-    []
+    [i18n.language]
   );
   const allQuizzesData: AllQuizzesData[] = useMemo(
     () => createAllQuizzesData(quizzes),

@@ -20,15 +20,16 @@ interface QuizzesData {
 export default function Quizzes() {
   const dispatch = useAppDispatch();
   const quizzes = useAppSelector(state => state.quizzes);
+  const user = useAppSelector(state => state.user);
 
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
     dispatch(getQuizzes());
-  }, [dispatch]);
+  }, [dispatch, user.preferedLang]);
 
-  const columns: Column[] = useMemo(() => createColumns(t), []);
+  const columns: Column[] = useMemo(() => createColumns(t), [i18n.language]);
   const data: QuizzesData[] = useMemo(
     () => createRowsData(quizzes, navigate),
     [quizzes]

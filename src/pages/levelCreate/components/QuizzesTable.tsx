@@ -19,7 +19,7 @@ export default function QuizzesTable({
 
   const selectedQuizzesColumns: Column[] = useMemo(
     () => createQuizColumns(),
-    []
+    [i18n.language]
   );
   const selectedQuizzesData: QuizData[] = useMemo(
     () => createQuizData(quizList, setQuizList),

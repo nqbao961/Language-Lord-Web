@@ -55,7 +55,8 @@ export default function LevelCreate() {
 
   useEffect(() => {
     dispatch(getQuizzes({ notInLevel: true }));
-  }, [dispatch]);
+    resetForm();
+  }, [dispatch, user.preferedLang]);
 
   return (
     <div className={styles.container}>
