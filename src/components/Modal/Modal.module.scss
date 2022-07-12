@@ -1,6 +1,8 @@
 :global {
-  #modal-root {
-    max-width: $body-max-width;
+  body.play {
+    #modal-root {
+      max-width: $body-max-width;
+    }
   }
 }
 
