@@ -46,7 +46,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   const [indexPositions, setIndexPositions] = useState<(number | undefined)[]>(
     initIndexPositions(currentQuiz)
   );
-  const [countDown, setCountDown] = useState(120);
+  const [countDown, setCountDown] = useState(60 * 5);
   const [intervalId, setIntervalId] = useState<any>(0);
   const [isPausing, setIsPausing] = useState(false);
   const [showWrong, setShowWrong] = useState(false);
@@ -341,7 +341,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
       }
     } else {
       // complete level
-      const gainedHint = (countDown > 0 ? 1 : 0) + Math.round(countDown / 10);
+      const gainedHint = (countDown > 0 ? 1 : 0) + Math.round(countDown / 50);
 
       dispatch(updateUserHint(user.hint[user.preferedLang] + gainedHint));
       dispatch(updateUserLevel(level.levelNumber + 1));
@@ -480,7 +480,9 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
             <div className={styles.belowWrapper}>
               <div className={styles.chosenChoices}>{chosenChoices}</div>
 
-              <div className={styles.mergedAnswer}>{mergedAnswer}</div>
+              <div className={styles.mergedAnswer}>
+                {mergedAnswer && <div>{mergedAnswer}</div>}
+              </div>
 
               <div className={styles.choices}>{choices}</div>
             </div>
