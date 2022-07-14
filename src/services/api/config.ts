@@ -8,16 +8,18 @@ export const baseURL = selectEnv({
   prod: 'https://language-lord-api.herokuapp.com',
 });
 
-const token = localStorage.getItem('token');
+export const instance = () => {
+  const token = localStorage.getItem('token');
 
-export const instance = axios.create({
-  baseURL,
-  headers: {
-    'Cache-Control': 'no-cache',
-    Pragma: 'no-cache',
-    Expires: '0',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  },
-});
+  return axios.create({
+    baseURL,
+    headers: {
+      'Cache-Control': 'no-cache',
+      Pragma: 'no-cache',
+      Expires: '0',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+};
 
 export const getLang = () => store.getState().user.preferedLang;

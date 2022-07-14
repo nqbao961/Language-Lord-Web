@@ -1,10 +1,11 @@
-import { AxiosResponse } from 'axios';
+import { User } from '../models';
 import { instance } from './config';
+import { APIResponse } from './type';
 
-type APIResponse<T> = Promise<AxiosResponse<T, any>>;
-
-export const googleRedirect = (redirectParams: string): APIResponse<any> =>
-  instance.request({
+export const googleRedirect = (
+  redirectParams: string
+): APIResponse<{ token: string; user: User }> =>
+  instance().request({
     url: '/google/redirect' + redirectParams,
     method: 'GET',
   });

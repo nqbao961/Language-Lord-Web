@@ -2,6 +2,7 @@ import { AnyAction } from 'redux';
 import { User } from '../../models';
 import {
   GET_USER,
+  UPDATE_USER,
   UPDATE_USER_HINT,
   UPDATE_USER_LANG,
   UPDATE_USER_LEVEL,
@@ -34,6 +35,9 @@ export default (user = defaultUserState, action: AnyAction) => {
       return (action.payload as User)
         ? (action.payload as User)
         : defaultUserState;
+
+    case UPDATE_USER:
+      return action.payload as User;
 
     case UPDATE_USER_LANG:
       return {

@@ -481,7 +481,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
               <div className={styles.chosenChoices}>{chosenChoices}</div>
 
               <div className={styles.mergedAnswer}>
-                {mergedAnswer && <div>{mergedAnswer}</div>}
+                {mergedAnswer.trim() && <div>{mergedAnswer}</div>}
               </div>
 
               <div className={styles.choices}>{choices}</div>

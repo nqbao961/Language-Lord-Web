@@ -1,6 +1,7 @@
 import { User } from '../../models';
 import {
   GET_USER,
+  UPDATE_USER,
   UPDATE_USER_HINT,
   UPDATE_USER_LANG,
   UPDATE_USER_LEVEL,
@@ -11,6 +12,10 @@ import { AppDispatch } from '../store';
 
 export const getUser = () => (dispatch: AppDispatch) => {
   dispatch({ type: GET_USER, payload: undefined });
+};
+
+export const updateUser = (user: User) => (dispatch: AppDispatch) => {
+  dispatch({ type: UPDATE_USER, payload: user });
 };
 
 export const updateUserLang =

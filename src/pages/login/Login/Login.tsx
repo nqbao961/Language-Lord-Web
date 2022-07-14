@@ -33,7 +33,7 @@ export default function Login() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = baseURL + '/google';
+    window.location.href = baseURL + '/google/login';
   };
 
   return (

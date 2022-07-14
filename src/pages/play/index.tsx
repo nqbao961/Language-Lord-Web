@@ -6,7 +6,7 @@ import Setting from './components/Setting';
 import { useAppDispatch, useAppSelector } from '../../services/hooks';
 import { Button } from '../../components';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Ready from './components/Ready';
 import { PlayState } from './type';
 import { getLevel } from '../../services/@redux/actions';
@@ -19,6 +19,7 @@ import {
   updatePlayingLevel,
   getLevelTotal,
 } from '../../services/@redux/actions/app';
+import * as api from '../../services/api';
 
 export default function Play() {
   const [playState, setPlayState] = useState<PlayState>('selectLevel');
@@ -30,6 +31,7 @@ export default function Play() {
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.user);
   const app = useAppSelector(state => state.app);
+  const isFirstRun = useRef(true);
 
   const onClickPlayLevel = () => {
     dispatch(
@@ -63,6 +65,19 @@ export default function Play() {
 
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(user));
+
+    if (isFirstRun.current || localStorage.getItem('token') === 'guest') {
+      isFirstRun.current = false;
+      return;
+    } else {
+      api.updateUser({
+        preferedLang: user.preferedLang,
+        level: user.level,
+        score: user.score,
+        hint: user.hint,
+        completedQuizzes: user.completedQuizzes,
+      });
+    }
   }, [user]);
 
   useEffect(() => {

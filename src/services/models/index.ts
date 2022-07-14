@@ -19,6 +19,14 @@ export interface User {
   completedQuizzes: { vi: Quiz['_id'][]; en: Quiz['_id'][] };
 }
 
+export interface UserUpdate {
+  preferedLang?: 'en' | 'vi';
+  level?: { vi: number; en: number };
+  score?: { vi: number; en: number };
+  hint?: { vi: number; en: number };
+  completedQuizzes?: { vi: Quiz['_id'][]; en: Quiz['_id'][] };
+}
+
 interface QuizProp {
   _id: string;
   content: string;

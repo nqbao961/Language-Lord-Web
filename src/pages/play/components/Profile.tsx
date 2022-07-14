@@ -22,7 +22,9 @@ export default function Profile() {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     navigate('/login', { replace: true });
+    history.go(0);
   };
 
   const changeLang = (lang: User['preferedLang']) => {
@@ -36,7 +38,7 @@ export default function Profile() {
         className={styles.profileButton}
         onClick={() => userModalRef.current?.showModal()}
       >
-        <img src={userMale} alt="profile-picture" />
+        <img src={user.avatar || userMale} alt="profile-picture" />
         <div className={styles.currentLanguage}>
           <img
             src={user.preferedLang === 'en' ? usFlag : vietnamFlag}
@@ -53,7 +55,7 @@ export default function Profile() {
 
             <div className={styles.userBodyRow}>
               <div className={styles.profileButton}>
-                <img src={userMale} alt="profile-picture" />
+                <img src={user.avatar || userMale} alt="profile-picture" />
               </div>
               <div>{user.name}</div>
             </div>
