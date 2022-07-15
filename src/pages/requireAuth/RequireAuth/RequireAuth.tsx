@@ -11,8 +11,15 @@ export default function RequireAuth() {
   const dispatch = useAppDispatch();
 
   const token = localStorage.getItem('token');
+  const sound = localStorage.getItem('sound'); // enabled/muted
+  const theme = localStorage.getItem('theme'); // light/dark
 
   useEffect(() => {
+    !['enabled', 'muted'].includes(sound + '') &&
+      localStorage.setItem('sound', 'enabled');
+    !['light', 'dark'].includes(theme + '') &&
+      localStorage.setItem('theme', 'light');
+
     if (
       token &&
       token !== 'guest' &&

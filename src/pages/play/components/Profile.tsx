@@ -38,7 +38,11 @@ export default function Profile() {
         className={styles.profileButton}
         onClick={() => userModalRef.current?.showModal()}
       >
-        <img src={user.avatar || userMale} alt="profile-picture" />
+        <img
+          src={user.avatar || userMale}
+          alt="profile-picture"
+          referrerPolicy="no-referrer"
+        />
         <div className={styles.currentLanguage}>
           <img
             src={user.preferedLang === 'en' ? usFlag : vietnamFlag}
@@ -55,7 +59,11 @@ export default function Profile() {
 
             <div className={styles.userBodyRow}>
               <div className={styles.profileButton}>
-                <img src={user.avatar || userMale} alt="profile-picture" />
+                <img
+                  src={user.avatar || userMale}
+                  alt="profile-picture"
+                  referrerPolicy="no-referrer"
+                />
               </div>
               <div>{user.name}</div>
             </div>

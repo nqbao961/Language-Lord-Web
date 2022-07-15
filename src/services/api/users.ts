@@ -14,3 +14,9 @@ export const updateUser = (user: UserUpdate): APIResponse<User> =>
     method: 'PATCH',
     data: user,
   });
+
+export const getRank = (): APIResponse<{ en: User[]; vi: User[] }> =>
+  instance().request({
+    url: `/users/rank`,
+    method: 'GET',
+  });

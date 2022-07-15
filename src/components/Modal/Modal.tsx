@@ -11,6 +11,7 @@ import SimpleBar from 'simplebar-react';
 import { createPortal } from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import { Button } from '../Button';
+import { useTranslation } from 'react-i18next';
 
 export type ModalImperativeType = {
   showModal: () => void;
@@ -22,7 +23,7 @@ type ModalProps = {
   body?: any;
   footer?: any;
   width?: number | string;
-  bodyMaxHeight?: number;
+  bodyMaxHeight?: number | string;
   showClose?: boolean;
   showCloseButton?: boolean;
   allowEsc?: boolean;
@@ -46,7 +47,7 @@ function Modal(
   ref: Ref<ModalImperativeType>
 ): any {
   const [show, setShow] = useState(false);
-  const divRef = useRef<HTMLDivElement>(null);
+  const { t, i18n } = useTranslation();
 
   useImperativeHandle(ref, () => ({
     showModal() {
@@ -107,7 +108,7 @@ function Modal(
             <div className={styles.footer}>
               <Button
                 className={styles.bigFont}
-                label="Okay"
+                label={t('Okay')}
                 handleClick={() => {
                   handleOkay && handleOkay();
                   handleHideModal();

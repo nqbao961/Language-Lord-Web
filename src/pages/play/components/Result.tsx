@@ -8,7 +8,7 @@ import next from '../../../assets/images/next.png';
 import clock from '../../../assets/images/alarm-clock.png';
 import lightBulb from '../../../assets/images/light-bulb.png';
 import styles from '../Play.module.scss';
-import { useAppDispatch, useAppSelector } from '../../../services/hooks';
+import { useAppSelector } from '../../../services/hooks';
 import { PlayState } from '../type';
 import { useEffect, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
@@ -26,8 +26,8 @@ export default function Result({
 }: ResultProps) {
   const [show, setShow] = useState(false);
   const { t, i18n } = useTranslation();
-  const dispatch = useAppDispatch();
   const app = useAppSelector(state => state.app);
+  const user = useAppSelector(state => state.user);
 
   useEffect(() => {
     setShow(true);
@@ -94,9 +94,15 @@ export default function Result({
                 alt="home"
                 onClick={() => setPlayState('selectLevel')}
               />
-              {app.remainTime > 0 && (
-                <img src={next} alt="next" onClick={() => handleNextLevel()} />
-              )}
+              {app.remainTime > 0 &&
+                app.levelTotal[user.preferedLang] >=
+                  user.level[user.preferedLang] && (
+                  <img
+                    src={next}
+                    alt="next"
+                    onClick={() => handleNextLevel()}
+                  />
+                )}
             </div>
           </div>
         </div>

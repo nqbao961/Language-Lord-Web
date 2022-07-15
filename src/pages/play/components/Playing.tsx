@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Level, Quiz } from '../../../services/models';
 import clock from '../../../assets/images/alarm-clock.png';
 import brain from '../../../assets/images/brain.png';
+import next from '../../../assets/images/next.png';
 import bulb from '../../../assets/images/light-bulb.png';
 import wrong from '../../../assets/images/wrong.png';
 import styles from '../Play.module.scss';
@@ -495,7 +496,24 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
           )}
 
           <div className={styles.actions}>
-            <img src={bulb} alt="bulb-icon" />
+            <div>{isCompletedQuiz && <img src={bulb} alt="bulb-icon" />}</div>
+            <div>
+              <img src={bulb} alt="bulb-icon" />
+            </div>
+            <div>
+              {isCompletedQuiz && (
+                <img
+                  src={next}
+                  alt="next-icon"
+                  onClick={() => {
+                    setShowContent(false);
+                    setTimeout(() => {
+                      gotoNextQuiz();
+                    }, 300);
+                  }}
+                />
+              )}
+            </div>
           </div>
         </div>
       </CSSTransition>

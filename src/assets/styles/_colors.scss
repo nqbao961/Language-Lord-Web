@@ -70,6 +70,7 @@ $hover-button-choice-primary-dark: #fdc0ff;
 
 $transparent: #ffffff00;
 $transparent-black: rgba(0, 0, 0, 0.3);
+$gold: #fece1c;
 
 :root {
   --primary: #{$primary-light};
@@ -108,6 +109,7 @@ $transparent-black: rgba(0, 0, 0, 0.3);
   --hover-button-primary: #{$hover-button-primary-light};
   --button-choice-primary: #{$button-choice-primary-light};
   --hover-button-choice-primary: #{$hover-button-choice-primary-light};
+  --gold: #{$gold};
 }
 .dark {
   --primary: #{$primary-dark};
@@ -146,4 +148,5 @@ $transparent-black: rgba(0, 0, 0, 0.3);
   --hover-button-primary: #{$hover-button-primary-dark};
   --button-choice-primary: #{$button-choice-primary-dark};
   --hover-button-choice-primary: #{$hover-button-choice-primary-dark};
+  --gold: #{$gold};
 }
