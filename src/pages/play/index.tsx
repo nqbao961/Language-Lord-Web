@@ -125,7 +125,12 @@ export default function Play() {
           <div className={styles.mainContent}>
             {playState === 'selectLevel' && (
               <div className={styles.selectLevelContainer}>
-                <img src={logo} alt="logo" />
+                <div className={styles.selectLevelLogo}>
+                  <div className={styles.selectLevelText}>{`${t('Welcome')}, ${
+                    user.name
+                  }!`}</div>
+                  <img src={logo} alt="logo" />
+                </div>
                 {app.levelTotal[user.preferedLang] >=
                 user.level[user.preferedLang] ? (
                   <Button
@@ -134,7 +139,9 @@ export default function Play() {
                     handleClick={onClickPlayLevel}
                   />
                 ) : (
-                  <div>{t('Well done! Stay tuned for upcoming levels!')}</div>
+                  <div className={styles.selectLevelText}>
+                    {t('Well done! Stay tuned for upcoming levels!')}
+                  </div>
                 )}
               </div>
             )}
