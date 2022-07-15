@@ -37,7 +37,14 @@ export default (user = defaultUserState, action: AnyAction) => {
         : defaultUserState;
 
     case UPDATE_USER:
-      return action.payload as User;
+      const returnedUser = action.payload as User;
+      if (!returnedUser.preferedLang) {
+        returnedUser.preferedLang =
+          (localStorage.getItem('i18nextLng')?.slice(0, 2) as
+            | User['preferedLang']
+            | null) || 'en';
+      }
+      return returnedUser;
 
     case UPDATE_USER_LANG:
       return {
