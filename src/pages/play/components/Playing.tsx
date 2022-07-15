@@ -44,6 +44,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   const [cellStyles, setCellStyles] = useState<React.CSSProperties[]>(
     initCellStyles(currentQuiz)
   );
+  const [showHint, setShowHint] = useState(initShowHint(currentQuiz));
   const [indexPositions, setIndexPositions] = useState<(number | undefined)[]>(
     initIndexPositions(currentQuiz)
   );
@@ -94,6 +95,10 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
           currentQuiz.type === 'shuffleLetters'
             ? currentQuiz.answer.split(' ')
             : [currentQuiz.answer];
+        const answerList =
+          currentQuiz.type === 'shuffleLetters'
+            ? currentQuiz.answer.replace(/ /g, '').split('')
+            : currentQuiz.answer.split(' ');
 
         return groupList.map((group, index) => (
           <div key={`chosenGroup-${index}`} className={styles.letterGroup}>
@@ -108,7 +113,9 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
                         ? styles.toChooseLetterCell
                         : styles.toChooseWordCell
                     }
-                  ></div>
+                  >
+                    {showHint[letterIndex] && answerList[letterIndex]}
+                  </div>
                 );
                 letterIndex++;
                 return cell;
@@ -119,7 +126,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
       default:
         return undefined;
     }
-  }, [currentQuiz]);
+  }, [currentQuiz, showHint]);
 
   const choices = useMemo(() => {
     switch (currentQuiz.type) {
@@ -305,6 +312,17 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
     }
   }
 
+  function initShowHint(quiz: Quiz) {
+    switch (quiz.type) {
+      case 'shuffleLetters':
+      case 'shuffleIdiom':
+        return quiz.content.split('/').map(() => false);
+
+      default:
+        return [];
+    }
+  }
+
   function initIndexPositions(quiz: Quiz) {
     switch (quiz.type) {
       case 'shuffleLetters':
@@ -313,6 +331,25 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
 
       default:
         return [];
+    }
+  }
+
+  function handleUseHint() {
+    switch (currentQuiz.type) {
+      case 'shuffleLetters':
+      case 'shuffleIdiom':
+        const toChooseIndex = indexPositions.findIndex(i => i === undefined);
+        if (toChooseIndex === -1) return;
+        const newShowHint = [...showHint];
+        newShowHint[toChooseIndex] = true;
+        setShowHint(newShowHint);
+        return;
+
+      case 'multipleChoice':
+        return;
+
+      default:
+        return;
     }
   }
 
@@ -333,6 +370,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
         case 'shuffleIdiom':
           setIndexPositions(initIndexPositions(nextQuiz));
           setCellStyles(initCellStyles(nextQuiz));
+          setShowHint(initShowHint(nextQuiz));
           break;
 
         case 'multipleChoice':
@@ -498,7 +536,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
           <div className={styles.actions}>
             <div>{isCompletedQuiz && <img src={bulb} alt="bulb-icon" />}</div>
             <div>
-              <img src={bulb} alt="bulb-icon" />
+              <img src={bulb} alt="bulb-icon" onClick={handleUseHint} />
             </div>
             <div>
               {isCompletedQuiz && (
