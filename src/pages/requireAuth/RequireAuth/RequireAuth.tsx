@@ -31,6 +31,9 @@ export default function RequireAuth() {
       });
     }
 
+    if (location.state?.from?.pathname === '/google/redirect')
+      window.history.replaceState({}, document.title);
+
     if (token) {
       location.pathname === '/' && navigate('/play', { replace: true });
     } else {

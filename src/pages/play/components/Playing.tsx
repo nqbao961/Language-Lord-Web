@@ -48,7 +48,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   const [indexPositions, setIndexPositions] = useState<(number | undefined)[]>(
     initIndexPositions(currentQuiz)
   );
-  const [countDown, setCountDown] = useState(60 * 50);
+  const [countDown, setCountDown] = useState(60 * 5);
   const [intervalId, setIntervalId] = useState<any>(0);
   const [isPausing, setIsPausing] = useState(false);
   const [showWrong, setShowWrong] = useState(false);

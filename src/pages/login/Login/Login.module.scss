@@ -2,7 +2,7 @@
 
 .container {
   margin: 0 auto;
-  width: $body-max-width;
+  max-width: $body-max-width;
   height: 100vh;
   background: rgb(63, 94, 251);
   background: linear-gradient(
