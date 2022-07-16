@@ -59,10 +59,15 @@ export function useSounds(soundType: soundType) {
   const pause = () => {
     sound.pause();
   };
+  const stop = () => {
+    sound.pause();
+    sound.currentTime = 0;
+  };
 
   return {
     sound,
     play,
     pause,
+    stop,
   };
 }

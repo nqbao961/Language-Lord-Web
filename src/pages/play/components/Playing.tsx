@@ -235,6 +235,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   };
 
   const handleCorrect = () => {
+    correctSound.stop();
     correctSound.play();
     dispatch(updateGainedScore(app.gainedScore + (isCompletedQuiz ? 0 : 10)));
     if (!isCompletedQuiz) {
@@ -252,6 +253,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
 
     if (chosenIndex === -1) {
       // Select
+      selectSound.stop();
       selectSound.play();
       const firstEmptyIndex = indexPositions.findIndex(i => i === undefined);
 
@@ -283,6 +285,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
       setIndexPositions(cloneIndexPositions);
     } else {
       // Deselect
+      deselectSound.stop();
       deselectSound.play();
       const notChosen = keyframes`
         from {
