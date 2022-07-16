@@ -3,7 +3,11 @@ import Profile from './components/Profile';
 import ScoreHint from './components/ScoreHint';
 import Rank from './components/Rank';
 import Setting from './components/Setting';
-import { useAppDispatch, useAppSelector } from '../../services/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useSounds,
+} from '../../services/hooks';
 import { Button } from '../../components';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useRef, useState } from 'react';
@@ -33,6 +37,8 @@ export default function Play() {
   const app = useAppSelector(state => state.app);
   const isFirstRun = useRef(true);
 
+  const themeSound = useSounds('theme');
+
   const onClickPlayLevel = () => {
     dispatch(
       getLevel(`${user.preferedLang}-${user.level[user.preferedLang]}`)
@@ -61,7 +67,23 @@ export default function Play() {
   useEffect(() => {
     dispatch(getLevelTotal());
     document.body.classList.add('play');
+
+    const playTheme = () => {
+      themeSound.play();
+    };
+    document.addEventListener('click', playTheme, { once: true });
+    document.addEventListener('touchstart', playTheme, { once: true });
+
+    return () => {
+      document.removeEventListener('click', playTheme);
+      document.removeEventListener('touchstart', playTheme);
+    };
   }, []);
+
+  useEffect(() => {
+    playState === 'playing' && themeSound.pause();
+    playState === 'selectLevel' && themeSound.play();
+  }, [playState]);
 
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(user));
@@ -104,7 +126,7 @@ export default function Play() {
           </div>
           <div className={styles.headerWrapper}>
             <Rank />
-            <Setting />
+            <Setting themeSound={themeSound.sound} />
           </div>
         </div>
       </CSSTransition>

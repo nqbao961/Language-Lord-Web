@@ -2,21 +2,27 @@ import styles from '../Play.module.scss';
 import setting from '../../../assets/images/setting.png';
 import { Modal } from '../../../components';
 import { useTranslation } from 'react-i18next';
-import { useModalRef } from '../../../services/hooks';
+import { useModalRef, useSounds } from '../../../services/hooks';
 import volume from '../../../assets/images/volume.png';
 import mute from '../../../assets/images/mute.png';
 import sun from '../../../assets/images/sun.png';
 import moon from '../../../assets/images/sleeping.png';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-export default function Setting() {
-  const [sound, setSound] = useState(localStorage.getItem('sound') || 'enable');
+type SettingProps = {
+  themeSound: HTMLAudioElement;
+};
+
+export default function Setting({ themeSound }: SettingProps) {
+  const [sound, setSound] = useState(localStorage.getItem('sound') || 'muted');
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
   const { t, i18n } = useTranslation();
   const settingModalRef = useModalRef();
+  const buttonSound = useSounds('button');
 
   const changeSound = (value: string) => {
+    value === 'enabled' ? themeSound.play() : themeSound.pause();
     setSound(value);
     localStorage.setItem('sound', value);
   };
@@ -37,7 +43,10 @@ export default function Setting() {
     <>
       <div
         className={styles.setting}
-        onClick={() => settingModalRef.current?.showModal()}
+        onClick={() => {
+          buttonSound.play();
+          settingModalRef.current?.showModal();
+        }}
       >
         <img src={setting} alt="setting-icon" />
       </div>
@@ -55,13 +64,19 @@ export default function Setting() {
                   className={sound === 'enabled' ? styles.active : ''}
                   src={volume}
                   alt="volume"
-                  onClick={() => changeSound('enabled')}
+                  onClick={() => {
+                    buttonSound.play();
+                    changeSound('enabled');
+                  }}
                 />
                 <img
                   className={sound === 'muted' ? styles.active : ''}
                   src={mute}
                   alt="mute"
-                  onClick={() => changeSound('muted')}
+                  onClick={() => {
+                    buttonSound.play();
+                    changeSound('muted');
+                  }}
                 />
               </div>
             </div>
@@ -73,13 +88,19 @@ export default function Setting() {
                   className={theme === 'light' ? styles.active : ''}
                   src={sun}
                   alt="sun"
-                  onClick={() => changeTheme('light')}
+                  onClick={() => {
+                    buttonSound.play();
+                    changeTheme('light');
+                  }}
                 />
                 <img
                   className={theme === 'dark' ? styles.active : ''}
                   src={moon}
                   alt="moon"
-                  onClick={() => changeTheme('dark')}
+                  onClick={() => {
+                    buttonSound.play();
+                    changeTheme('dark');
+                  }}
                 />
               </div>
             </div>

@@ -133,7 +133,7 @@ function Modal(
       containerRef.current!.style.display = 'flex';
     } else {
       setTimeout(() => {
-        containerRef.current!.style.display = 'none';
+        containerRef.current && (containerRef.current.style.display = 'none');
       }, 300);
     }
 

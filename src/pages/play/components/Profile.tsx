@@ -12,6 +12,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { User } from '../../../services/models';
 import { updateUserLang } from '../../../services/@redux/actions';
+import { useSounds } from '../../../services/hooks';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ export default function Profile() {
   const userModalRef = useModalRef();
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.user);
+  const buttonSound = useSounds('button');
 
   const logout = () => {
     localStorage.removeItem('token');
@@ -36,7 +38,10 @@ export default function Profile() {
     <>
       <div
         className={styles.profileButton}
-        onClick={() => userModalRef.current?.showModal()}
+        onClick={() => {
+          buttonSound.play();
+          userModalRef.current?.showModal();
+        }}
       >
         <img
           src={user.avatar || userMale}
@@ -75,13 +80,19 @@ export default function Profile() {
                   className={user.preferedLang === 'en' ? styles.active : ''}
                   src={usFlag}
                   alt="us-flag"
-                  onClick={() => changeLang('en')}
+                  onClick={() => {
+                    buttonSound.play();
+                    changeLang('en');
+                  }}
                 />
                 <img
                   className={user.preferedLang === 'vi' ? styles.active : ''}
                   src={vietnamFlag}
                   alt="vietnam-flag"
-                  onClick={() => changeLang('vi')}
+                  onClick={() => {
+                    buttonSound.play();
+                    changeLang('vi');
+                  }}
                 />
               </div>
             </div>

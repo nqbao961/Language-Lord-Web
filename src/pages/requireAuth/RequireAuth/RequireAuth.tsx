@@ -16,7 +16,7 @@ export default function RequireAuth() {
 
   useEffect(() => {
     !['enabled', 'muted'].includes(sound + '') &&
-      localStorage.setItem('sound', 'enabled');
+      localStorage.setItem('sound', 'muted');
     !['light', 'dark'].includes(theme + '') &&
       localStorage.setItem('theme', 'light');
 

@@ -1,4 +1,5 @@
 import styles from './Button.module.scss';
+import { useSounds } from '../../services/hooks';
 
 type ButtonProps = {
   label: string | JSX.Element;
@@ -17,12 +18,17 @@ export function Button({
   disabled = false,
   handleClick = () => {},
 }: ButtonProps) {
+  const buttonSound = useSounds('button');
+
   return (
     <button
       className={`${styles.container} ${className || ''} ${
         styles[type || 'primary']
       } ${kind === 'fab' ? styles.fab : ''} ${disabled ? styles.disabled : ''}`}
-      onClick={e => handleClick(e)}
+      onClick={e => {
+        buttonSound.play();
+        handleClick(e);
+      }}
     >
       {label}
     </button>

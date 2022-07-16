@@ -6,6 +6,7 @@ import {
   useAppDispatch,
   useAppSelector,
   useModalRef,
+  useSounds,
 } from '../../../services/hooks';
 import { handleCallApi } from '../../../services/@redux/utils';
 import * as api from '../../../services/api';
@@ -18,6 +19,7 @@ export default function Rank() {
   const rankModalRef = useModalRef();
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.user);
+  const buttonSound = useSounds('button');
 
   const handleGetRank = () => {
     handleCallApi(dispatch, async () => {
@@ -50,7 +52,13 @@ export default function Rank() {
 
   return (
     <>
-      <div className={styles.rank} onClick={() => handleGetRank()}>
+      <div
+        className={styles.rank}
+        onClick={() => {
+          buttonSound.play();
+          handleGetRank();
+        }}
+      >
         <img src={trophy} alt="trophy-icon" />
       </div>
 

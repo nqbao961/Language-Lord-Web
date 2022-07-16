@@ -12,6 +12,7 @@ import {
   useAppDispatch,
   useAppSelector,
   useModalRef,
+  useSounds,
 } from '../../../services/hooks';
 import { Button, Modal } from '../../../components';
 import { correctStrings, getRandomInt } from '../../../services/helpers';
@@ -62,6 +63,12 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   const dispatch = useAppDispatch();
   const app = useAppSelector(state => state.app);
   const user = useAppSelector(state => state.user);
+
+  const selectSound = useSounds('button3');
+  const deselectSound = useSounds('button2');
+  const correctSound = useSounds('correct');
+  const incorrectSound = useSounds('incorrect');
+  const buttonSound = useSounds('button');
 
   const quizRequirement = useMemo(() => {
     switch (currentQuiz.type) {
@@ -220,6 +227,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   );
 
   const handleWrong = () => {
+    incorrectSound.play();
     setShowWrong(true);
     setTimeout(() => {
       setShowWrong(false);
@@ -227,6 +235,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   };
 
   const handleCorrect = () => {
+    correctSound.play();
     dispatch(updateGainedScore(app.gainedScore + (isCompletedQuiz ? 0 : 10)));
     if (!isCompletedQuiz) {
       dispatch(updateUserScore(user.score[user.preferedLang] + 10));
@@ -243,6 +252,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
 
     if (chosenIndex === -1) {
       // Select
+      selectSound.play();
       const firstEmptyIndex = indexPositions.findIndex(i => i === undefined);
 
       const chosen = keyframes`
@@ -273,6 +283,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
       setIndexPositions(cloneIndexPositions);
     } else {
       // Deselect
+      deselectSound.play();
       const notChosen = keyframes`
         from {
             top:${chosenCellPositions[chosenIndex].top}px;
@@ -557,8 +568,14 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
 
           <div className={styles.actions}>
             <div>{isCompletedQuiz && <img src={bulb} alt="bulb-icon" />}</div>
-            <div className={styles.hintWrapper}>
-              <img src={bulb} alt="bulb-icon" onClick={handleUseHint} />
+            <div
+              className={styles.hintWrapper}
+              onClick={() => {
+                buttonSound.play();
+                handleUseHint();
+              }}
+            >
+              <img src={bulb} alt="bulb-icon" />
               <span>{user.hint[user.preferedLang]}</span>
             </div>
             <div>
@@ -567,6 +584,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
                   src={next}
                   alt="next-icon"
                   onClick={() => {
+                    buttonSound.play();
                     setShowContent(false);
                     setTimeout(() => {
                       gotoNextQuiz();

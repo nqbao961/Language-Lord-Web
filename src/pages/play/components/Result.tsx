@@ -8,7 +8,7 @@ import next from '../../../assets/images/next.png';
 import clock from '../../../assets/images/alarm-clock.png';
 import lightBulb from '../../../assets/images/light-bulb.png';
 import styles from '../Play.module.scss';
-import { useAppSelector } from '../../../services/hooks';
+import { useAppSelector, useSounds } from '../../../services/hooks';
 import { PlayState } from '../type';
 import { useEffect, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
@@ -29,8 +29,13 @@ export default function Result({
   const app = useAppSelector(state => state.app);
   const user = useAppSelector(state => state.user);
 
+  const completedSound = useSounds('completed');
+  const failedSound = useSounds('failed');
+  const buttonSound = useSounds('button');
+
   useEffect(() => {
     setShow(true);
+    app.remainTime > 0 ? completedSound.play() : failedSound.play();
   }, []);
 
   return (
@@ -88,11 +93,21 @@ export default function Result({
             </div>
 
             <div className={styles.ribbonActions}>
-              <img src={repeat} alt="repeat" onClick={() => replay()} />
+              <img
+                src={repeat}
+                alt="repeat"
+                onClick={() => {
+                  buttonSound.play();
+                  replay();
+                }}
+              />
               <img
                 src={home}
                 alt="home"
-                onClick={() => setPlayState('selectLevel')}
+                onClick={() => {
+                  buttonSound.play();
+                  setPlayState('selectLevel');
+                }}
               />
               {app.remainTime > 0 &&
                 app.levelTotal[user.preferedLang] >=
@@ -100,7 +115,10 @@ export default function Result({
                   <img
                     src={next}
                     alt="next"
-                    onClick={() => handleNextLevel()}
+                    onClick={() => {
+                      buttonSound.play();
+                      handleNextLevel();
+                    }}
                   />
                 )}
             </div>
