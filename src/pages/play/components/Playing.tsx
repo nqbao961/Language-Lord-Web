@@ -48,7 +48,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   const [indexPositions, setIndexPositions] = useState<(number | undefined)[]>(
     initIndexPositions(currentQuiz)
   );
-  const [countDown, setCountDown] = useState(60 * 5);
+  const [countDown, setCountDown] = useState(60 * 50);
   const [intervalId, setIntervalId] = useState<any>(0);
   const [isPausing, setIsPausing] = useState(false);
   const [showWrong, setShowWrong] = useState(false);
@@ -56,6 +56,7 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   const [correctTitle, setCorrectTitle] = useState(
     t(correctStrings[getRandomInt(5)]).toUpperCase() + '!!!'
   );
+  const [multipleHintUsed, setMultipleHintUsed] = useState(false);
 
   const trueModalRef = useModalRef();
   const dispatch = useAppDispatch();
@@ -171,13 +172,18 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
             label={choice}
             type="choice"
             handleClick={() => onChooseChoice(choice)}
+            className={
+              checkMultipleAnswer(choice) && multipleHintUsed
+                ? styles.hintUsed
+                : ''
+            }
           />
         ));
 
       default:
         return undefined;
     }
-  }, [currentQuiz, cellStyles]);
+  }, [currentQuiz, cellStyles, multipleHintUsed]);
 
   const mergedAnswer = useMemo(() => {
     switch (currentQuiz.type) {
@@ -293,8 +299,12 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
     }
   }
 
+  function checkMultipleAnswer(chosenChoice: string) {
+    return chosenChoice.toLowerCase() === currentQuiz.answer.toLowerCase();
+  }
+
   function onChooseChoice(chosenChoice: string) {
-    if (chosenChoice.toLowerCase() === currentQuiz.answer.toLowerCase()) {
+    if (checkMultipleAnswer(chosenChoice)) {
       handleCorrect();
     } else {
       handleWrong();
@@ -335,21 +345,31 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
   }
 
   function handleUseHint() {
-    switch (currentQuiz.type) {
-      case 'shuffleLetters':
-      case 'shuffleIdiom':
-        const toChooseIndex = indexPositions.findIndex(i => i === undefined);
-        if (toChooseIndex === -1) return;
-        const newShowHint = [...showHint];
-        newShowHint[toChooseIndex] = true;
-        setShowHint(newShowHint);
-        return;
+    if (user.hint[user.preferedLang] > 0) {
+      switch (currentQuiz.type) {
+        case 'shuffleLetters':
+        case 'shuffleIdiom':
+          const toChooseIndex = indexPositions.findIndex(i => i === undefined);
+          if (toChooseIndex === -1) return;
 
-      case 'multipleChoice':
-        return;
+          const newShowHint = [...showHint];
+          if (!newShowHint[toChooseIndex]) {
+            newShowHint[toChooseIndex] = true;
+            setShowHint(newShowHint);
+            dispatch(updateUserHint(user.hint[user.preferedLang] - 1));
+          }
+          return;
 
-      default:
-        return;
+        case 'multipleChoice':
+          if (!multipleHintUsed) {
+            setMultipleHintUsed(true);
+            dispatch(updateUserHint(user.hint[user.preferedLang] - 1));
+          }
+          return;
+
+        default:
+          return;
+      }
     }
   }
 
@@ -457,6 +477,8 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
         });
       });
       setChosenCellPositions(newCellPositions);
+    } else if (currentQuiz.type === 'multipleChoice') {
+      setMultipleHintUsed(false);
     }
   }, [currentQuiz]);
 
@@ -535,8 +557,9 @@ export default function Playing({ level, setPlayState }: PlayingProps) {
 
           <div className={styles.actions}>
             <div>{isCompletedQuiz && <img src={bulb} alt="bulb-icon" />}</div>
-            <div>
+            <div className={styles.hintWrapper}>
               <img src={bulb} alt="bulb-icon" onClick={handleUseHint} />
+              <span>{user.hint[user.preferedLang]}</span>
             </div>
             <div>
               {isCompletedQuiz && (

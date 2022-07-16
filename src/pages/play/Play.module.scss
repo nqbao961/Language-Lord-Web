@@ -479,6 +479,21 @@
   }
 }
 
+.hintWrapper {
+  position: relative;
+  display: flex;
+
+  span {
+    position: absolute;
+    display: flex;
+    bottom: -8px;
+    right: -6px;
+    background-color: var(--background);
+    padding: 0 4px;
+    border-radius: 12px;
+  }
+}
+
 .multipleChoiceContainer {
   display: flex;
   flex-direction: column;
@@ -491,6 +506,12 @@
   grid-template-columns: auto auto;
   align-items: center;
   gap: 12px;
+
+  button.hintUsed {
+    animation-name: zoom-in-out;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+  }
 }
 
 // Correct modal
