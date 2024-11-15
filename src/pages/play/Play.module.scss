@@ -3,6 +3,9 @@
 
 .container {
   background: radial-gradient(50% 50% at 50% 50%, #a659fe 0%, #6f53fd 100%);
+  max-width: $body-max-width;
+  position: fixed;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
