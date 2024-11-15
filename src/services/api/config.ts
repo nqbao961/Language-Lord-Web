@@ -4,8 +4,8 @@ import { selectEnv } from '../env';
 
 export const baseURL = selectEnv({
   dev: 'http://localhost:5000',
-  staging: 'https://language-lord-server.onrender.com',
-  prod: 'https://language-lord-server.onrender.com',
+  staging: process.env.REACT_APP_API_ENDPOINT,
+  prod: process.env.REACT_APP_API_ENDPOINT,
 });
 
 export const instance = () => {
